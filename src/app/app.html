@@ -1,0 +1,55 @@
+<main class="min-h-screen">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Unified Platform Ecosystem Switcher (Floating Control Console) -->
+@if (showCockpit()) {
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] w-max font-sans">
+  <div class="glass-panel bg-neutral-950/90 backdrop-blur-2xl border border-white/10 rounded-full py-2 px-3.5 flex items-center gap-4 md:gap-5 shadow-[0_24px_64px_rgba(0,0,0,0.95)]">
+    <!-- Pulse signal status indicator (Active system indicator) -->
+    <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5 font-mono text-[9px] text-gray-400 select-none shrink-0 hidden md:flex">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-driveway-gold opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-driveway-gold"></span>
+      </span>
+      <span class="tracking-widest font-bold text-white uppercase">DRIVEWAY ACCESS COCKPIT</span>
+    </div>
+
+    <!-- Dividing line between label and buttons -->
+    <div class="h-5 w-px bg-white/10 hidden md:block shrink-0"></div>
+
+    <!-- The actual interactive portal pathways -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Showroom link -->
+      <a routerLink="/" routerLinkActive="bg-white/15 text-white ring-1 ring-white/15" [routerLinkActiveOptions]="{ exact: true }" class="h-10 px-3 sm:px-4 rounded-full flex items-center gap-2 hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs font-semibold select-none whitespace-nowrap">
+        <mat-icon class="text-[16px] w-4.5 h-4.5">language</mat-icon>
+        <span class="hidden sm:inline">Buyer Portal</span>
+      </a>
+
+      <!-- Unified Auth Gate Link -->
+      <a routerLink="/auth" routerLinkActive="bg-[#a855f7]/15 text-[#d8b4fe] ring-1 ring-[#a855f7]/15" class="h-10 px-3 sm:px-4 rounded-full flex items-center gap-2 hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs font-semibold select-none whitespace-nowrap">
+         <mat-icon class="text-[16px] w-4.5 h-4.5">sensor_door</mat-icon>
+         <span class="hidden sm:inline">Portal Switcher</span>
+      </a>
+
+      <!-- Seller Link -->
+      <a routerLink="/seller/dashboard" routerLinkActive="bg-driveway-gold/20 text-driveway-gold ring-1 ring-driveway-gold/20" class="h-10 px-3 sm:px-4 rounded-full flex items-center gap-2 hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs font-semibold select-none whitespace-nowrap">
+        <mat-icon class="text-[16px] w-4.5 h-4.5">storefront</mat-icon>
+        <span class="hidden sm:inline">Dealer Console</span>
+      </a>
+
+      <!-- Inspector Link -->
+      <a routerLink="/inspector/dashboard" routerLinkActive="bg-driveway-cyan/20 text-driveway-cyan ring-1 ring-driveway-cyan/20" class="h-10 px-3 sm:px-4 rounded-full flex items-center gap-2 hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs font-semibold select-none whitespace-nowrap">
+        <mat-icon class="text-[16px] w-4.5 h-4.5">verified_user</mat-icon>
+        <span class="hidden sm:inline">Inspector</span>
+      </a>
+
+      <!-- Logistics Link -->
+      <a routerLink="/delivery/dashboard" routerLinkActive="bg-[#06b6d4]/20 text-[#06b6d4] ring-1 ring-[#06b6d4]/20" class="h-10 px-3 sm:px-4 rounded-full flex items-center gap-1.5 sm:gap-2 hover:bg-white/10 text-gray-400 hover:text-white transition-all text-xs font-semibold select-none whitespace-nowrap">
+         <mat-icon class="text-[16px] w-4.5 h-4.5">local_shipping</mat-icon>
+         <span class="hidden sm:inline">Logistics</span>
+      </a>
+    </div>
+  </div>
+</div>
+}
