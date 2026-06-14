@@ -6,10 +6,19 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import {join} from 'node:path';
+import cookieParser from 'cookie-parser';
+import { apiRouter, authenticateJwt } from './backend/api';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(authenticateJwt);
+
+app.use('/api', apiRouter);
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -34,6 +43,14 @@ app.use(
     redirect: false,
   }),
 );
+
+// Serve the standalone premium Carvello HTML page
+app.get('/carvello', (req, res) => {
+  res.sendFile(join(browserDistFolder, 'carvello.html'));
+});
+app.get('/carvello.html', (req, res) => {
+  res.sendFile(join(browserDistFolder, 'carvello.html'));
+});
 
 /**
  * Handle all other requests by rendering the Angular application.

@@ -26,6 +26,7 @@ export class App {
     const url = this.currentUrl();
     return url.includes('/admin') || 
            url.includes('/seller') || 
+           url.includes('/broker') || 
            url.includes('/inspector') || 
            url.includes('/delivery') ||
            url.includes('/auth');

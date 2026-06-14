@@ -1,6 +1,6 @@
 {
-  "name": "Driveway247.ng",
-  "description": "Premium automotive commerce ecosystem in Nigeria for verified vehicles and secure escrow payments.",
+  "name": "CARVELLO",
+  "description": "The premium African automotive ecosystem for trusted vehicle sourcing, inspections, negotiation, secure escrow payments, and delivery.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

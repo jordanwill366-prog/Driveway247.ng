@@ -58,7 +58,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "externalDependencies": [
+                "express",
+                "cookie-parser",
+                "jsonwebtoken",
+                "@google/genai"
+              ]
             }
           },
           "defaultConfiguration": "production"

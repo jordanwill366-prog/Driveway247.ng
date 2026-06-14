@@ -1,1121 +1,867 @@
-import { Component, signal, OnInit, inject, computed, HostListener } from '@angular/core';
+import { Component, signal, OnInit, inject, computed } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { VehicleRailComponent } from '../../components/vehicle-rail/vehicle-rail';
-import { ArticleCardComponent } from '../../components/article-card/article-card';
-import { NgClass } from '@angular/common';
-import { PlatformStateService, Vehicle } from '../../services/platform-state';
-import { RouterLink } from '@angular/router';
+import { NgClass, CommonModule } from '@angular/common';
+import { PlatformStateService, Vehicle, UserAccount, SourcingProposal, SourcingRequest } from '../../services/platform-state';
+import { RouterLink, Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header';
 import { FooterComponent } from '../../components/footer/footer';
+import { VehicleCardComponent } from '../../components/vehicle-card/vehicle-card';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatIconModule, VehicleRailComponent, ArticleCardComponent, NgClass, RouterLink, HeaderComponent, FooterComponent],
-  template: `
-    <app-header></app-header>
-    <div class="min-h-screen bg-driveway-black overflow-hidden relative pb-10">
-
-      
-      <!-- Ultra-Premium Ambient Glowing Backgrounds (Atmospheric glow cycles) -->
-      <div class="fixed top-0 inset-x-0 h-screen pointer-events-none z-0 overflow-hidden select-none animate-hero-glow">
-          <div class="absolute top-[-25%] left-[-15%] w-[65%] h-[65%] rounded-full bg-driveway-gold/4 blur-[160px] animate-glow-atmosphere pointer-events-none"></div>
-          <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-driveway-cyan/3.5 blur-[180px] animate-glow-orbit-right pointer-events-none"></div>
-          <div class="absolute top-[35%] left-[25%] w-[45%] h-[45%] rounded-full bg-amber-500/[0.015] blur-[150px] animate-soft-pulse pointer-events-none"></div>
-      </div>
-
-      <!-- Luxury Trust Core Brand Ribbon -->
-      <div class="relative z-30 bg-gradient-to-r from-driveway-gold/10 via-driveway-black to-driveway-gold/10 border-b border-white/5 py-3.5 px-6 pt-24 text-center text-[11.5px] text-gray-300 backdrop-blur-md vibe-3d-alert">
-         <div class="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-2.5 animate-hero-badge" style="transform: translateZ(15px);">
-            <span class="inline-flex h-2 w-2 rounded-full bg-driveway-gold animate-pulse"></span>
-            <span class="font-display font-medium text-white tracking-widest uppercase text-[10px]">Escrow Protected & Admin Verified:</span> 
-            <span class="font-light text-gray-400">All vehicle inventory has passed an offline 150-Point Inspection. Payouts are safely held until physical handover.</span>
-         </div>
-      </div>
-
-      <!-- Cinematic Luxury Hero Section -->
-      <section class="relative w-full min-h-[90vh] md:h-[85vh] flex flex-col justify-center items-center text-center overflow-hidden z-10 pt-10">
-        <!-- Background Imagery and Parallax Gradients -->
-        <div class="absolute inset-0 z-0 select-none overflow-hidden">
-           <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2560&auto=format&fit=crop" 
-                 class="w-full h-full object-cover transform origin-center transition-all duration-300 ease-out animate-hero-image" 
-                 [style.transform]="heroImgStyle()"
-                 alt="Driveway247 Cinematic Vehicle hero" referrerpolicy="no-referrer" />
-           <div class="absolute inset-0 bg-gradient-to-b from-driveway-black/70 via-driveway-black/35 to-driveway-black"></div>
-           <div class="absolute inset-0 bg-gradient-to-t from-driveway-black via-transparent to-transparent"></div>
-           <div class="absolute inset-0 bg-radial-at-c from-transparent via-driveway-black/30 to-driveway-black/90"></div>
-        </div>
-
-        <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 flex flex-col lg:flex-row items-center justify-between text-left gap-12 pt-6">
-            <!-- Hero Typography Block with slow reveal parallax -->
-            <div class="flex-1 max-w-3xl transform transition-all duration-[1200ms] cubic-bezier(0.16,1,0.3,1) translate-y-0 opacity-100 vibe-3d-card" 
-                 [style.transform]="heroTextStyle()"
-                 [ngClass]="{'translate-y-12 opacity-0': !isLoaded()}">
-               <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-driveway-cyan/35 bg-driveway-cyan/5 text-driveway-cyan text-[10px] font-bold tracking-[0.2em] uppercase mb-8 shadow-[0_0_20px_rgba(6,182,212,0.15)] select-none animate-hero-badge" style="transform: translateZ(20px);">
-                  <span class="w-1.5 h-1.5 rounded-full bg-driveway-cyan animate-ping"></span>
-                  150-Point Physical Verification Active
-               </div>
-               
-               <h1 class="text-5xl sm:text-7xl lg:text-[76px] font-display font-medium tracking-tight mb-6 leading-[0.94] text-white animate-hero-headline vibe-3d-text">
-                  Discover inspected <br class="hidden md:block"/>vehicles with <br/>
-                  <span class="gold-gradient-text italic font-light pr-4">confidence.</span>
-               </h1>
-               
-               <p class="text-base sm:text-base text-gray-300 font-light max-w-2xl mb-10 leading-relaxed drop-shadow-md animate-hero-subtext" style="transform: translateZ(15px);">
-                  Africa's digital trust authority for verified automotive transactions. Every vehicle undergoes full field diagnostic testing. Every naira is held securely under platform escrow protectorates.
-               </p>
-               
-               <!-- Search & Dynamic Query Controls -->
-               <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-hero-cta" style="transform: translateZ(30px);">
-                  <div class="relative flex-1 max-w-xl group">
-                     <mat-icon class="absolute left-4.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-driveway-gold transition-colors duration-300">search</mat-icon>
-                     <input type="text" 
-                            [value]="searchQuery()"
-                            (input)="onSearchChange($event)"
-                            placeholder="Search Lexus RX, Land Cruiser, Model S..." 
-                            class="w-full h-14 pl-12 pr-16 bg-white/[0.05] border border-white/10 rounded-full text-white placeholder:text-gray-500 focus:outline-none focus:border-driveway-gold/40 focus:bg-white/[0.08] focus:shadow-[0_0_25px_rgba(235,177,91,0.1)] transition-all duration-500 tracking-wide font-sans text-sm outline-none" />
-                     @if (searchQuery()) {
-                       <button (click)="clearSearch()" class="absolute right-16 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
-                          <mat-icon class="text-[18px] w-4.5 h-4.5">close</mat-icon>
-                       </button>
-                     }
-                     <button class="button-magnetic absolute right-1.5 top-1.5 bottom-1.5 px-6 bg-driveway-gold text-black rounded-full text-xs font-bold uppercase tracking-wider hover:bg-amber-400 transition-colors shadow-lg shadow-driveway-gold/20">
-                        Find
-                     </button>
-                  </div>
-               </div>
-
-               <!-- Floating Core Trust Indicators below Search -->
-               <div class="flex flex-wrap items-center gap-6 mt-10 text-xs text-gray-400 font-light border-t border-white/5 pt-6 max-w-xl animate-hero-trust" style="transform: translateZ(12px);">
-                  <div class="flex items-center gap-2 transition-transform duration-300 hover:translate-x-1 group/ind cursor-default">
-                     <mat-icon class="text-driveway-gold text-[16px] w-4 h-4 group-hover/ind:scale-110 duration-300">shield</mat-icon>
-                     <span class="group-hover/ind:text-gray-200 transition-colors">Secure Escrow Protection</span>
-                  </div>
-                  <div class="flex items-center gap-2 transition-transform duration-300 hover:translate-x-1 group/ind cursor-default">
-                     <mat-icon class="text-driveway-cyan text-[16px] w-4 h-4 group-hover/ind:scale-110 duration-300">verified_user</mat-icon>
-                     <span class="group-hover/ind:text-gray-200 transition-colors">150-Point Physical Exam</span>
-                  </div>
-                  <div class="flex items-center gap-2 transition-transform duration-300 hover:translate-x-1 group/ind cursor-default">
-                     <mat-icon class="text-emerald-500 text-[16px] w-4 h-4 group-hover/ind:scale-110 duration-300">support_agent</mat-icon>
-                     <span class="group-hover/ind:text-gray-200 transition-colors">Arbitration Panel</span>
-                  </div>
-               </div>
-            </div>
-            
-            <!-- Side Interactive Info Panel -->
-            <div class="hidden lg:flex flex-col items-center justify-center transform transition-all duration-[1200ms] delay-100 translate-x-0 opacity-100 select-none pb-4 animate-hero-sidepanel w-[320px] shrink-0" 
-                 [style.transform]="sidePanelStyle()"
-                 [ngClass]="{'translate-x-12 opacity-0': !isLoaded()}">
-               
-               <!-- Main Glass Control Terminal -->
-               <div class="w-full glass-panel bg-neutral-950/85 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-[0_40px_80px_rgba(0,0,0,0.85)] relative overflow-hidden transition-all duration-500 hover:border-driveway-gold/30 hover:scale-[1.01] group/side">
-                  
-                  <!-- Corner Glow Effects -->
-                  <div class="absolute -top-12 -right-12 w-28 h-28 bg-driveway-gold/25 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover/side:bg-driveway-gold/35"></div>
-                  <div class="absolute -bottom-12 -left-12 w-28 h-28 bg-driveway-cyan/15 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover/side:bg-driveway-cyan/25"></div>
-
-                  <!-- Top Security Header Badge -->
-                  <div class="flex items-center justify-between mb-5 select-none pb-3.5 border-b border-white/5 font-sans">
-                     <div class="flex items-center gap-2">
-                        <span class="flex h-2 w-2 relative">
-                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-driveway-cyan opacity-80"></span>
-                           <span class="relative inline-flex rounded-full h-2 w-2 bg-driveway-cyan"></span>
-                        </span>
-                        <span class="font-mono text-[9px] uppercase tracking-widest text-driveway-cyan font-bold">Weekly Spotlight</span>
-                     </div>
-                     <span class="text-[9px] font-mono font-semibold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full border border-white/5 animate-pulse">AES-256</span>
-                  </div>
-
-                  <!-- Curated Spotlight Image with floating specs overlay -->
-                  <div class="relative rounded-2xl overflow-hidden aspect-[1.4] mb-4 border border-white/5 mx-auto w-full">
-                     <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&auto=format&fit=crop" 
-                          class="w-full h-full object-cover transition-transform duration-700 group-hover/side:scale-110" 
-                          alt="Curated Showcase Vehicle" referrerpolicy="no-referrer" />
-                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                     
-                     <!-- Overlay Price and Score -->
-                     <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                        <span class="font-mono text-xs font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10">₦145M</span>
-                        <span class="font-mono text-[9px] font-bold text-emerald-400 bg-emerald-950/70 backdrop-blur-md px-2.5 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1">
-                           <span class="h-1.5 w-1.5 bg-emerald-400 rounded-full"></span> 99% SCORE
-                        </span>
-                     </div>
-                  </div>                  <!-- Spotlight details and Trust credentials inside the card -->
-                  <div class="text-left space-y-3 font-sans mt-2">
-                     <div>
-                        <h4 class="font-display font-medium text-white text-sm tracking-wide leading-none group-hover/side:text-driveway-gold transition-colors duration-300">Porsche 911 Carrera S</h4>
-                        <p class="text-[10.5px] text-gray-400 mt-1">2022 &middot; 8,400 KM &middot; Verified Lagos Dealer</p>
-                     </div>
-
-                     <!-- Clean, subtle buyer trust elements -->
-                     <div class="space-y-2.5 pt-3 border-t border-white/5 text-xs">
-                        <div class="flex items-center gap-2">
-                           <mat-icon class="text-driveway-cyan text-base shrink-0">verified_user</mat-icon>
-                           <span class="text-[11px] text-gray-300 font-light">150-Point Inspection Passed</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                           <mat-icon class="text-driveway-gold text-base shrink-0">shield</mat-icon>
-                           <span class="text-[11px] text-gray-300 font-light">Escrow Protected Payouts</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                           <mat-icon class="text-emerald-400 text-base shrink-0">local_shipping</mat-icon>
-                           <span class="text-[11px] text-gray-300 font-light">Secure Delivery Available</span>
-                        </div>
-                     </div>
-                  </div>
-
-               </div>
-
-               <!-- Sleek Downward Cinematic Scroll Prompt to entice user to scroll -->
-               <div class="mt-6 flex flex-col items-center gap-2 text-center pointer-events-auto cursor-pointer group/scroll bg-white/[0.02] hover:bg-white/[0.06] border border-white/5 hover:border-driveway-gold/30 px-6 py-4 rounded-2xl shadow-xl transition-all duration-300" (click)="scrollToInventory()">
-                  <span class="font-display font-medium text-[10.5px] tracking-[0.25em] lg:tracking-[0.3em] uppercase text-driveway-gold group-hover/scroll:text-white transition-colors duration-300">
-                     Discover verified vehicles
-                  </span>
-                  <div class="w-5 h-8 rounded-full border border-white/20 flex justify-center py-1.5 opacity-60 group-hover/scroll:opacity-100 group-hover/scroll:border-driveway-gold transition-all duration-500">
-                     <!-- Interactive floating wheel/bead -->
-                     <div class="w-1 h-1.5 rounded-full bg-driveway-gold animate-bounce"></div>
-                  </div>
-                  <!-- Glowing vertical optical line that points downwards -->
-                  <div class="w-[1px] h-8 bg-gradient-to-b from-driveway-gold to-transparent opacity-40 group-hover/scroll:opacity-100 group-hover/scroll:h-10 duration-500 transition-all"></div>
-               </div>
-
-            </div>
-        </div>
-      </section>
-
-      <!-- Quick Platform Filter Sticky Anchor Row (Netflix/Luxury styled) -->
-      <div id="sticky-filters" class="w-full border-y border-white/5 bg-driveway-black/85 backdrop-blur-2xl sticky top-16 z-40 shadow-lg">
-        <div class="max-w-[1400px] mx-auto px-6 py-4 overflow-x-auto hide-scrollbar">
-           <div class="flex items-center justify-between gap-6 min-w-max">
-              <div class="flex items-center gap-3">
-                 @for(filter of quickFilters; track filter.label) {
-                    <button (click)="selectFilter(filter.label)" 
-                            class="button-magnetic px-5 py-2.5 rounded-full border border-white/[0.06] bg-driveway-charcoal/55 text-xs font-semibold tracking-wide uppercase text-gray-400 hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300 flex items-center gap-2" 
-                            [class.!bg-driveway-gold]="activeFilter() === filter.label" 
-                            [class.!text-black]="activeFilter() === filter.label" 
-                            [class.!border-driveway-gold]="activeFilter() === filter.label"
-                            [class.!shadow-[0_4px_15px_rgba(235,177,91,0.25)]]="activeFilter() === filter.label">
-                       @if(filter.icon) {
-                          <span class="text-lg opacity-85" [class.!opacity-100]="activeFilter() === filter.label">{{ filter.icon }}</span>
-                       }
-                       {{ filter.label }}
-                    </button>
-                 }
-              </div>
-              <div class="text-[11px] text-gray-500 font-mono flex items-center gap-1.5 bg-white/[0.03] border border-white/5 px-3.5 py-1.5 rounded-full">
-                 <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                 <span>Showing {{ filteredVehiclesList().length }} Inspected Cars</span>
-              </div>
-           </div>
-        </div>
-      </div>
-
-      <div class="relative z-10 w-full bg-driveway-black">
-         
-         <!-- DYNAMIC DELAY SKELETON LOADER FOR FILTER EVENT CHANNELS -->
-         @if (isFilterLoading()) {
-            <div class="max-w-[1400px] mx-auto px-6 py-20 animate-luxury-reveal">
-               <div class="flex items-center justify-between mb-8">
-                  <div>
-                     <div class="h-6 w-60 rounded-md bg-white/5 skeleton-shimmer mb-2.5"></div>
-                     <div class="h-4 w-96 rounded-md bg-white/5 skeleton-shimmer"></div>
-                  </div>
-               </div>
-               <div class="flex gap-6 overflow-x-hidden pt-4">
-                  @for(shimmer of [1,2,3,4]; track shimmer) {
-                     <div class="rounded-2xl border border-white/5 bg-driveway-charcoal/30 p-5 shrink-0 w-[340px] h-[430px] flex flex-col justify-between">
-                        <div>
-                           <div class="h-48 w-full rounded-xl bg-white/5 skeleton-shimmer mb-6"></div>
-                           <div class="h-4 w-28 rounded bg-white/5 skeleton-shimmer mb-3"></div>
-                           <div class="h-6 w-full rounded bg-white/5 skeleton-shimmer mb-4"></div>
-                           <div class="grid grid-cols-2 gap-3">
-                              <div class="h-4 rounded bg-white/5 skeleton-shimmer"></div>
-                              <div class="h-4 rounded bg-white/5 skeleton-shimmer"></div>
-                              <div class="h-4 rounded bg-white/5 skeleton-shimmer"></div>
-                              <div class="h-4 rounded bg-white/5 skeleton-shimmer"></div>
-                           </div>
-                        </div>
-                        <div class="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
-                           <div class="h-6 w-24 rounded bg-white/5 skeleton-shimmer"></div>
-                           <div class="h-6.5 w-16 rounded-full bg-white/5 skeleton-shimmer"></div>
-                        </div>
-                     </div>
-                  }
-               </div>
-            </div>
-         } @else {
-            
-            <!-- Active Filter and Search Query Header -->
-            @if (searchQuery() || activeFilter() !== 'All Vehicles') {
-               <div class="max-w-[1400px] mx-auto px-6 pt-12 animate-luxury-reveal">
-                  <div class="flex items-center justify-between border-b border-white/5 pb-5">
-                     <div class="text-gray-400 text-sm">
-                        Search matches for <span class="text-white font-semibold">"{{ searchQuery() || activeFilter() }}"</span> ({{ filteredVehiclesList().length }} assets verified)
-                     </div>
-                     <button (click)="resetAllFilters()" class="text-xs text-driveway-gold hover:text-white transition-colors flex items-center gap-1.5 uppercase tracking-wider font-semibold group/reset">
-                        <mat-icon class="text-[16px] w-4 h-4 group-hover/reset:rotate-180 transition-transform duration-500">refresh</mat-icon> Reset View filters
-                     </button>
-                  </div>
-               </div>
-            }
-
-            <!-- PRIMARY OVERLAY RAIL FOR ACTIVE FILTER/SEARCH RESULTS -->
-            @if (searchQuery() || activeFilter() !== 'All Vehicles') {
-               <div class="max-w-[1400px] mx-auto px-10 pt-4 scroll-reveal active">
-                  @if (filteredVehiclesList().length > 0) {
-                     <app-vehicle-rail 
-                        title="Matches Found" 
-                        subtitle="All matching results backed by our robust escrow transaction assurance"
-                        [vehicles]="filteredVehiclesList()"
-                        (vehicleClick)="openDetailView($event)">
-                     </app-vehicle-rail>
-                  } @else {
-                     <div class="py-20 text-center max-w-md mx-auto bg-driveway-charcoal/20 border border-white/5 rounded-3xl p-8 backdrop-blur shadow-2xl animate-luxury-reveal">
-                        <mat-icon class="text-gray-500 text-6xl h-14 w-14 mb-4">search_off</mat-icon>
-                        <h3 class="text-2xl font-display font-medium text-white mb-2">Refine Search Parameters</h3>
-                        <p class="text-gray-400 text-xs mb-6 leading-relaxed">We could not match any currently inspected listings with these specifications. Reset to navigate the full premium showroom.</p>
-                        <button (click)="resetAllFilters()" class="button-magnetic px-7 py-3 bg-gradient-to-r from-driveway-gold to-amber-600 text-black rounded-full font-bold uppercase tracking-wider text-xs shadow-lg shadow-driveway-gold/15">Show Full Showroom</button>
-                     </div>
-                  }
-               </div>
-            }
-
-            <!-- MULTIPLE HORIZONTAL DISCOVERY CAROUSEL RAILS (NETFLIX FOR VERIFIED CARS STYLE) -->
-            <main class="py-8 transition-opacity duration-700" [ngClass]="{'opacity-55': searchQuery() || activeFilter() !== 'All Vehicles'}">
-               
-               <!-- Rail 1: Top Picks For You (Personalized luxury recommendations) -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="Top Discoveries For You" 
-                     subtitle="Engineered with excellent diagnostics and Lagos/Abuja field verification"
-                     [vehicles]="topPicksList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-               <div class="max-w-[1400px] mx-auto px-6 py-4">
-                  <div class="h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-               </div>
-
-               <!-- Rail 2: Recently Inspected & Scored -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="Recently Physically Inspected" 
-                     subtitle="Latest field operations logs matching high physical integrity metric scores"
-                     [vehicles]="recentlyInspectedList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-               <!-- Decorative Visual Intermission: Premium Parallax Collection Showcase Banner -->
-               <section class="max-w-[1400px] mx-auto px-6 my-20 select-none relative rounded-3xl overflow-hidden shadow-2xl border border-white/5 group/banner scroll-reveal">
-                  <div class="absolute inset-0 overflow-hidden z-0">
-                     <img src="https://images.unsplash.com/photo-1611016186353-9af58c69a533?q=80&w=2560&auto=format&fit=crop" 
-                          class="w-full h-full object-cover scale-110 transition-transform duration-300 ease-out" 
-                          [style.transform]="bannerParallaxStyle()"
-                          alt="Premium background decoration" referrerpolicy="no-referrer" />
-                     <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
-                  </div>
-                  
-                  <div class="relative z-10 py-20 px-10 max-w-2xl">
-                     <span class="text-driveway-gold font-bold tracking-[0.25em] uppercase text-[10px] mb-3 block animate-pulse">Curated Luxury Tier</span>
-                     <h2 class="text-3xl sm:text-5xl font-display font-medium text-white leading-tight mb-4 tracking-tight">The Premium Collection.</h2>
-                     <p class="text-gray-300 text-sm font-light leading-relaxed mb-8">
-                        Showcasing high-tier masterpieces like Porsche Carrera, Range Rover Autobiography, and Mercedes GLE models. Individually verified mechanics sign off on double-layered powertrain health metrics.
-                     </p>
-                     <button (click)="selectFilter('Luxury Offers')" class="button-magnetic px-7 py-3.5 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all">Explore Premium Collection</button>
-                  </div>
-               </section>
-
-               <!-- Rail 3: Premium Collection (₦100M+ Masterpieces) -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="The Premium Collection" 
-                     subtitle="Top-tier luxury models backed by multi-point physical diagnostic logs"
-                     [vehicles]="premiumCollectionList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-               <div class="max-w-[1400px] mx-auto px-6 py-4">
-                  <div class="h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-               </div>
-
-               <!-- Rail 4: Luxury SUVs Selection -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="Luxury SUV Collection" 
-                     subtitle="Rugged terrain capabilities with high clearance verified for African motorways"
-                     [vehicles]="suvCollectionList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-               <div class="max-w-[1400px] mx-auto px-6 py-4">
-                  <div class="h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-               </div>
-
-               <!-- Rail 5: Budget-friendly Collections (<₦50M) -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="Budget-Friendly Showroom" 
-                     subtitle="Incredible high-efficiency commuters scored with verified diagnostics under ₦50M"
-                     [vehicles]="budgetCollectionList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-               <div class="max-w-[1400px] mx-auto px-6 py-4">
-                  <div class="h-px bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-               </div>
-
-               <!-- Rail 6: Electric & Hybrid Vehicle Innovators -->
-               <div class="scroll-reveal">
-                  <app-vehicle-rail 
-                     title="Electric & Hybrid Autonomy" 
-                     subtitle="Battery state-of-health diagnostics and battery cycle verified models"
-                     [vehicles]="electricCollectionList()"
-                     (vehicleClick)="openDetailView($event)">
-                  </app-vehicle-rail>
-               </div>
-
-            </main>
-         }
-
-         <!-- SECTION 10: Premium Trust & Security Integration with sequential reveal -->
-         <section class="py-24 px-6 relative overflow-hidden mt-10 border-t border-b border-white/5 select-none scroll-reveal">
-            <div class="absolute inset-0 bg-driveway-charcoal/60"></div>
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2560&auto=format&fit=crop')] mix-blend-overlay opacity-[0.035] bg-cover bg-center grayscale pointer-events-none"></div>
-            <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-driveway-black via-driveway-black/90 to-transparent z-10"></div>
-            
-            <div class="max-w-[1400px] mx-auto relative z-20">
-               <div class="max-w-3xl">
-                  <span class="text-driveway-gold font-bold tracking-[0.25em] uppercase text-[10px] mb-4 block drop-shadow-[0_0_10px_rgba(235,177,91,0.5)] animate-pulse">Uncompromising Trust Guarantee</span>
-                  <h2 class="text-4xl md:text-5xl font-display font-medium text-white mb-6 leading-tight tracking-tight">Every transaction is certified,<br/>secured, and fully protected.</h2>
-                  <p class="text-gray-400 text-sm font-light mb-12 leading-relaxed">
-                     At Driveway247.ng, finding your next car is defined by total peace of mind. By combining rigorous, offline physical inspections with an independent secure escrow process, we ensure a transparent, safe, and friction-free experience from showroom page to vehicle delivery.
-                  </p>
-                  
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-                     <div class="flex gap-4 group/trust transition-all duration-300 hover:translate-x-1.5">
-                        <button class="w-12 h-12 rounded-full border border-driveway-cyan/35 flex items-center justify-center bg-driveway-black text-driveway-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)] group-hover/trust:bg-driveway-cyan group-hover/trust:text-black hover:scale-105 transition-all duration-300 shrink-0 cursor-default">
-                           <mat-icon class="text-base">verified_user</mat-icon>
-                        </button>
-                        <div>
-                           <h4 class="font-display font-medium text-lg mb-1.5 text-white">150-Point Physical Check</h4>
-                           <p class="text-xs text-gray-400 leading-relaxed"> certified automotive specialists physically inspect chassis structures, run computer-guided powertrain diagnostics, and verify VIN identities before any vehicle is approved.</p>
-                        </div>
-                     </div>
-                     <div class="flex gap-4 group/trust transition-all duration-300 hover:translate-x-1.5">
-                        <button class="w-12 h-12 rounded-full border border-driveway-gold/35 flex items-center justify-center bg-driveway-black text-driveway-gold shadow-[0_0_15px_rgba(235,177,91,0.15)] group-hover/trust:bg-driveway-gold group-hover/trust:text-black hover:scale-105 transition-all duration-300 shrink-0 cursor-default">
-                           <mat-icon class="text-base">shield</mat-icon>
-                        </button>
-                        <div>
-                           <h4 class="font-display font-medium text-lg mb-1.5 text-white">Escrow Protected Payouts</h4>
-                           <p class="text-xs text-gray-400 leading-relaxed">Your payment is held securely in a protected escrow holding account. Funds are released to the dealership only after your successful handover and condition verification.</p>
-                        </div>
-                     </div>
-                     <div class="flex gap-4 group/trust transition-all duration-300 hover:translate-x-1.5">
-                        <button class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-driveway-charcoal text-white hover:scale-105 group-hover/trust:bg-white group-hover/trust:text-black transition-all duration-300 shrink-0 cursor-default">
-                           <mat-icon class="text-base">home_work</mat-icon>
-                        </button>
-                        <div>
-                           <h4 class="font-display font-medium text-lg mb-1.5 text-white">Verified Dealer Network</h4>
-                           <p class="text-xs text-gray-400 leading-relaxed">We partner strictly with fully audited, officially licensed dealerships. Direct communications and documents are seamlessly facilitated by our expert concierge desk.</p>
-                        </div>
-                     </div>
-                     <div class="flex gap-4 group/trust transition-all duration-300 hover:translate-x-1.5">
-                        <button class="w-12 h-12 rounded-full border border-emerald-500/25 flex items-center justify-center bg-driveway-black text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:bg-emerald-500 hover:text-white hover:scale-105 transition-all duration-300 shrink-0 cursor-default">
-                           <mat-icon class="text-base">local_shipping</mat-icon>
-                        </button>
-                        <div>
-                           <h4 class="font-display font-medium text-lg mb-1.5 text-white">Guaranteed Delivery Safety</h4>
-                           <p class="text-xs text-gray-400 leading-relaxed">If the vehicle physical condition upon logistics handover does not perfectly match its certificate diagnostics, our admin process coordinates your instant refund release.</p>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         <!-- SECTION 11: Premium Testimonials and Social Proof -->
-         <section class="py-24 px-6 bg-[#090909] scroll-reveal">
-            <div class="max-w-[1400px] mx-auto text-center">
-               <span class="text-driveway-cyan font-bold tracking-[0.2em] uppercase text-[10px] mb-3 block animate-pulse">Testimonials & Reviews</span>
-               <h2 class="text-4xl font-display font-medium text-white mb-16 tracking-tight">Ecosystem Testaments</h2>
-               
-               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  @for(review of testimonials; track review.name; let idx = $index) {
-                     <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-driveway-charcoal/20 text-left relative flex flex-col justify-between hover:border-white/10 hover:bg-driveway-charcoal/25 hover:-translate-y-1.5 transition-all duration-500 shadow-xl">
-                        <div>
-                           <div class="flex items-center gap-1 text-driveway-gold mb-6 select-none">
-                              @for(star of [1,2,3,4,5]; track star) {
-                                 <mat-icon class="text-[18px] w-[18px] h-[18px]">star</mat-icon>
-                              }
-                           </div>
-                           <p class="text-gray-300 text-sm font-light leading-relaxed italic mb-8">
-                              "{{ review.text }}"
-                           </p>
-                        </div>
-                        <div class="flex items-center gap-4.5 pt-6 border-t border-white/5 mt-auto">
-                           <div class="w-10 h-10 rounded-full bg-gradient-to-br from-driveway-gold to-yellow-900 font-display font-bold text-black flex items-center justify-center text-sm shadow select-none">
-                              {{ review.initials }}
-                           </div>
-                           <div>
-                              <h4 class="font-display font-medium text-white text-sm">{{ review.name }}</h4>
-                              <p class="text-[10.5px] text-gray-500 font-mono select-none">{{ review.role }} &middot; {{ review.location }}</p>
-                           </div>
-                        </div>
-                     </div>
-                  }
-               </div>
-
-               <!-- Live Metrics Dashboard row with real-time automatic scrolling triggers -->
-               <div id="stats-row" class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 border-t border-white/5 pt-16 select-none">
-                  <div>
-                     <p class="text-3xl md:text-5xl font-display font-semibold text-white tracking-tight">₦{{ escrowCounter() }}M</p>
-                     <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-semibold">Active Escrow Pool</p>
-                  </div>
-                  <div>
-                     <p class="text-3xl md:text-5xl font-display font-semibold text-driveway-cyan tracking-tight">{{ inspectionCounter() }}%</p>
-                     <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-semibold">Guaranteed Inspection</p>
-                  </div>
-                  <div>
-                     <p class="text-3xl md:text-5xl font-display font-semibold text-white tracking-tight">{{ bypassCounter() }}%</p>
-                     <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-semibold">Bypass Rate</p>
-                  </div>
-                  <div>
-                     <p class="text-3xl md:text-5xl font-display font-semibold text-driveway-gold tracking-tight">{{ arbitrationCounter() }} Days</p>
-                     <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2 font-semibold">Arbitration Window</p>
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         <!-- SECTION 9: Driveway Journal & Educational Content -->
-         <section class="py-24 px-6 bg-[#040404] border-t border-white/5 select-none scroll-reveal">
-            <div class="max-w-[1400px] mx-auto">
-               <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-12 gap-4">
-                  <div>
-                     <span class="text-driveway-gold font-bold tracking-[0.2em] uppercase text-[10px] mb-2 block animate-pulse">Premium Insights</span>
-                     <h2 class="text-4xl font-display font-medium text-white tracking-tight">The Driveway Journal</h2>
-                     <p class="text-gray-450 text-xs mt-1 leading-relaxed">Automotive mechanical analysis, transport safety protocols, and purchasing intelligence</p>
-                  </div>
-                  <a href="#" class="luxury-link flex items-center gap-1.5 text-driveway-gold hover:text-white transition-colors text-xs font-bold uppercase tracking-wider group">
-                     Explore Journal <mat-icon class="text-[16px] w-[16px] h-[16px] group-hover:translate-x-1.5 transition-transform duration-300">arrow_forward</mat-icon>
-                  </a>
-               </div>
-
-               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  @for(article of articles; track article.title; let idx = $index) {
-                     <div>
-                        <app-article-card
-                           [image]="article.image"
-                           [title]="article.title"
-                           [category]="article.category"
-                           [readTime]="article.readTime"
-                           [excerpt]="article.excerpt">
-                        </app-article-card>
-                     </div>
-                  }
-               </div>
-            </div>
-         </section>
-
-         <!-- SECTION 12: Mobile Pocket App Promotion -->
-         <section class="relative py-28 px-6 overflow-hidden bg-gradient-to-t from-[#0a0a0a] to-[#040404] border-t border-white/5 select-none scroll-reveal">
-            <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-driveway-charcoal to-transparent z-0"></div>
-            <div class="absolute bottom-[-15%] left-1/2 -track-x-1/2 w-[900px] h-[450px] bg-driveway-gold/10 blur-[130px] rounded-full z-0 pointer-events-none animate-soft-pulse"></div>
-            
-            <div class="max-w-4xl mx-auto text-center relative z-10 select-none">
-               <span class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-8 bg-white/5 shadow-inner transition-transform duration-500 hover:rotate-12">
-                  <mat-icon class="text-driveway-gold text-[30px] w-8 h-8">smartphone</mat-icon>
-               </span>
-               <h2 class="text-5xl md:text-6xl font-display font-medium mb-6 text-white tracking-tight leading-tight">The showroom in<br/>your pocket.</h2>
-               <p class="text-gray-400 text-sm md:text-base font-light mb-10 max-w-2xl mx-auto leading-relaxed">Download the certified Driveway247 app for automatic price drop alerts, live photo reports from field mechanics, and fast secure pay releases directly from your device.</p>
-               
-               <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <button class="button-magnetic px-8 py-4 bg-white text-black rounded-full font-bold uppercase text-xs tracking-wider shadow-[0_8px_30px_rgba(255,255,255,0.15)] hover:bg-gray-200 transition-all flex items-center gap-2">
-                     <mat-icon class="text-sm">phone_iphone</mat-icon> App Store
-                  </button>
-                  <button class="button-magnetic px-8 py-4 bg-white/10 backdrop-blur-md text-white border border-white/10 rounded-full font-bold uppercase text-xs tracking-wider hover:bg-white/15 transition-all flex items-center gap-2">
-                     <mat-icon class="text-sm">shop</mat-icon> Google Play
-                  </button>
-               </div>
-            </div>
-         </section>
-      </div>
-
-      <!-- Floating Mobile App Bottom Navigation Hub with ambient backglow -->
-      <div class="md:hidden fixed bottom-6 inset-x-6 z-40 mobile-nav-bar rounded-full px-6 py-3.5 border border-white/10 flex items-center justify-between shadow-[0_22px_50px_rgba(0,0,0,0.85)] max-w-md mx-auto animate-hero-cta">
-         <button routerLink="/" class="flex flex-col items-center gap-1 text-driveway-gold scale-105 transition-all outline-none">
-            <mat-icon class="text-lg">explore</mat-icon>
-            <span class="text-[9px] font-semibold tracking-wide uppercase">Discover</span>
-         </button>
-         <a routerLink="/seller/dashboard" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
-            <mat-icon class="text-lg">campaign</mat-icon>
-            <span class="text-[9px] font-medium tracking-wide text-gray-400">Sell Car</span>
-         </a>
-         <a routerLink="/inspector/dashboard" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
-            <mat-icon class="text-lg">engineering</mat-icon>
-            <span class="text-[9px] font-medium tracking-wide text-gray-400">Inspect</span>
-         </a>
-         <a routerLink="/admin/dashboard" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-all">
-            <mat-icon class="text-lg">security</mat-icon>
-            <span class="text-[9px] font-medium tracking-wide text-gray-400">Admin</span>
-         </a>
-      </div>
-
-      <app-footer></app-footer>
-    </div>
-
-    <!-- CINEMATIC VEHICLE DYNAMIC DETAIL OVERLAY (Slide and blur in) -->
-    @if(selectedVehicle(); as vehicle) {
-       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/95 backdrop-blur-2xl animate-luxury-reveal select-none">
-          <div class="relative w-full max-w-6xl bg-driveway-charcoal border border-white/10 rounded-3xl overflow-hidden shadow-[0_45px_90px_rgba(0,0,0,0.95)] flex flex-col lg:flex-row max-h-[92vh] mt-4 z-10 animate-luxury-reveal">
-             
-              <!-- Close absolute button with floating spring bounce -->
-              <button id="close-modal-btn" (click)="closeDetailView()" class="button-magnetic absolute top-6 right-6 z-40 bg-black/80 hover:bg-black text-white hover:text-driveway-gold w-11 h-11 rounded-full border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300">
-                 <mat-icon>close</mat-icon>
-              </button>
-
-              <!-- LEFT DECK: Vehicle media visual & 150-Point inspection metrics results -->
-              <div class="flex-1 overflow-y-auto p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-white/10 max-h-[48vh] lg:max-h-none">
-                 <div class="relative rounded-2xl overflow-hidden mb-6 h-64 md:h-80 bg-driveway-black shadow-inner">
-                    <!-- Loaded reveal animation for detail vehicle images -->
-                    <img [src]="vehicle.image" [alt]="vehicle.model" 
-                         #detImg
-                         (load)="detImg.classList.add('loaded')"
-                         class="w-full h-full object-cover cinematic-blur-up" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-driveway-charcoal via-transparent to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-                       <div>
-                          <span class="px-3 py-1 bg-driveway-cyan text-black text-[9px] font-bold tracking-[0.2em] uppercase rounded shadow-lg animate-pulse select-none">PHYSICALLY INSPECTED</span>
-                          <h2 class="text-2xl md:text-3xl font-display font-medium text-white mt-2.5 tracking-tight">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h2>
-                       </div>
-                       <div class="text-right">
-                          <span class="text-[10px] text-gray-400 block uppercase tracking-wider select-none">Escrow Price Locked</span>
-                          <div class="text-2xl font-display font-semibold text-white">₦{{ vehicle.price }}</div>
-                       </div>
-                    </div>
-                 </div>
-
-                 <!-- 150-POINT OFFICIAL VERIFIED PHYSICAL REPORT PANEL -->
-                 <div class="glass-panel p-6 rounded-2xl border-l-[4px] border-l-driveway-cyan bg-driveway-black/45 mb-6 shadow-inner select-none">
-                    <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
-                       <div class="flex items-center gap-2">
-                          <mat-icon class="text-driveway-cyan animate-pulse">verified_user</mat-icon>
-                          <h4 class="font-display font-bold uppercase tracking-[0.15em] text-[10px] text-white">Certified Physical Verification Report</h4>
-                       </div>
-                       <span class="text-[9px] text-gray-500 font-mono">VIN CHASSIS MATCHED ✓</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4 select-none">
-                       <div class="bg-white/[0.03] p-3 rounded-xl text-center border border-white/5 hover:border-driveway-cyan/30 hover:bg-white/5 transition-all">
-                          <span class="text-[10px] text-gray-400 block mb-1">Engine</span>
-                          <span class="text-lg font-bold text-emerald-400 font-mono">{{ vehicle.inspectionDetails?.engineRating || 94 }}%</span>
-                       </div>
-                       <div class="bg-white/[0.03] p-3 rounded-xl text-center border border-white/5 hover:border-driveway-cyan/30 hover:bg-white/5 transition-all">
-                          <span class="text-[10px] text-gray-400 block mb-1">Brakes</span>
-                          <span class="text-lg font-bold text-emerald-400 font-mono">{{ vehicle.inspectionDetails?.brakesRating || 92 }}%</span>
-                       </div>
-                       <div class="bg-white/[0.03] p-3 rounded-xl text-center border border-white/5 hover:border-driveway-cyan/30 hover:bg-white/5 transition-all">
-                          <span class="text-[10px] text-gray-400 block mb-1">Powertrain</span>
-                          <span class="text-lg font-bold text-emerald-400 font-mono">{{ vehicle.inspectionDetails?.transmissionRating || 95 }}%</span>
-                       </div>
-                       <div class="bg-white/[0.03] p-3 rounded-xl text-center border border-white/5 hover:border-driveway-cyan/30 hover:bg-white/5 transition-all">
-                          <span class="text-[10px] text-gray-400 block mb-1">Body/Rust</span>
-                          <span class="text-lg font-bold text-emerald-400 font-mono">{{ vehicle.inspectionDetails?.bodyRating || 89 }}%</span>
-                       </div>
-                       <div class="bg-white/[0.03] p-2.5 rounded-xl text-center border border-white/5 hover:border-driveway-cyan/30 hover:bg-white/5 transition-all">
-                          <span class="text-[10px] text-gray-400 block mb-1">Interior</span>
-                          <span class="text-lg font-bold text-emerald-400 font-mono">{{ vehicle.inspectionDetails?.interiorRating || 93 }}%</span>
-                       </div>
-                    </div>
-
-                    <p class="text-[11.5px] text-gray-300 font-light italic leading-relaxed bg-white/[0.01] p-3 rounded-lg border border-white/5">
-                       "{{ vehicle.inspectionDetails?.inspectorNotes || 'Verified authentic structural and electrical diagnostics. Chassis matching certified on-site by field inspectors. Ready for secure transport dispatch.' }}"
-                    </p>
-                 </div>
-
-                 <!-- ESCROW LOGISTICS SEQUENCE DIAGRAM -->
-                 <div class="space-y-4 select-none">
-                    <h5 class="text-[10px] font-bold uppercase tracking-[0.2em] text-driveway-gold">Secure Escrow Safe Protocol</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div class="bg-driveway-black/35 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors flex gap-3 text-xs leading-normal">
-                           <mat-icon class="text-driveway-gold shrink-0 text-lg w-5 h-5 animate-pulse">payments</mat-icon>
-                           <div>
-                              <span class="font-medium text-white block mb-0.5">Deposit in Escrow</span>
-                              <span class="text-gray-400 text-[10.5px]">Driveway247 locks deposit securely under platform contracts.</span>
-                           </div>
-                        </div>
-                        <div class="bg-driveway-black/35 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors flex gap-3 text-xs leading-normal">
-                           <mat-icon class="text-driveway-cyan shrink-0 text-lg w-5 h-5">local_shipping</mat-icon>
-                           <div>
-                              <span class="font-medium text-white block mb-0.5">Supervised Handover</span>
-                              <span class="text-gray-400 text-[10.5px]">Logistics partners coordinate dispatch and transport verification.</span>
-                           </div>
-                        </div>
-                        <div class="bg-driveway-black/35 p-4 rounded-xl border border-white/5 hover:border-white/10 transition-colors flex gap-3 text-xs leading-normal">
-                           <mat-icon class="text-emerald-450 shrink-0 text-lg w-5 h-5">verified</mat-icon>
-                           <div>
-                              <span class="font-medium text-white block mb-0.5">Arbitrate & Payout</span>
-                              <span class="text-gray-400 text-[10.5px]">Review for 14 Days. Payout released once buyer signs off.</span>
-                           </div>
-                        </div>
-                    </div>
-                 </div>
-              </div>
-
-              <!-- RIGHT DECK: Active Escrow checkout controls & compliance chatbot -->
-              <div class="w-full lg:w-[480px] flex flex-col p-6 md:p-8 bg-driveway-black/35 overflow-y-auto max-h-[44vh] lg:max-h-none z-10 select-none">
-                 <div class="mb-5 select-none">
-                    <span class="text-[10px] text-driveway-gold font-bold uppercase tracking-widest block">Active Verification Score</span>
-                    <div class="flex items-center gap-2 mt-2">
-                       <div class="px-2.5 py-1 bg-driveway-cyan/10 text-driveway-cyan border border-driveway-cyan/25 text-[9px] font-bold uppercase rounded tracking-wide animate-pulse">
-                          SCORE METRIC: {{ vehicle.score || '95' }}% PERFECT MATCH
-                       </div>
-                       <span class="text-[11px] text-gray-500 font-mono">Location: {{ vehicle.location }}</span>
-                    </div>
-                 </div>
-
-                 <!-- Purchase & Escrow Contract Locking states -->
-                 @if (purchaseRef()) {
-                    <div class="bg-emerald-500/10 border border-emerald-500/25 rounded-2xl p-5 text-center mb-6 shadow-inner animate-luxury-reveal">
-                       <mat-icon class="text-emerald-450 text-5xl h-12 w-12 mx-auto mb-2 animate-bounce">shield</mat-icon>
-                       <p class="font-display font-semibold text-lg text-emerald-400 tracking-wide">Escrow Contract Active!</p>
-                       <p class="text-xs text-gray-300 mt-2">Funds representing ₦{{ vehicle.price }} locked by Driveway247.ng.</p>
-                       <span class="text-[9.5px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full mt-3 inline-block font-mono">CONTRACT ID: {{ purchaseRef() }}</span>
-                       
-                       <div class="mt-4 pt-4 border-t border-white/5 text-left text-[11px] space-y-2 text-gray-400 leading-normal">
-                          <p class="flex items-center gap-2 font-light"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span> Dealership notified of escrow secure lock</p>
-                          <p class="flex items-center gap-2 font-light"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Syncing with <a routerLink="/seller/dashboard" class="text-driveway-gold underline">Seller Hub</a> to dispatch</p>
-                       </div>
-                    </div>
-                 } @else {
-                    <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-5 mb-6">
-                       <p class="text-xs text-gray-400 mb-4 font-light leading-relaxed">
-                          Platform accepts certified mobile bank transfers or Visa channels. Buyers have absolute 100% money-back structural assurance.
-                       </p>
-                       <button id="buy-car-escrow" (click)="exerciseEscrowPurchase(vehicle)" class="button-magnetic w-full py-4 rounded-full bg-driveway-gold text-black hover:bg-amber-400 font-display font-medium text-sm uppercase tracking-wider shadow-[0_8px_30px_rgba(235,177,91,0.25)] flex items-center justify-center gap-2">
-                          <mat-icon class="text-sm">lock</mat-icon> LOCK VIA SECURE ESCROW (₦{{ vehicle.price }})
-                       </button>
-                    </div>
-                 }
-
-                 <!-- COMPLIANCE-HARDENED INTERACTIVE CONSULT CHAT -->
-                 <div class="flex-1 flex flex-col glass-panel rounded-2xl border border-white/10 overflow-hidden bg-driveway-black/80 max-h-[290px]">
-                    <div class="p-3 bg-white/5 border-b border-white/10 flex items-center justify-between select-none">
-                       <span class="text-[9px] font-bold uppercase tracking-wider text-white">Interactive Compliance Consult</span>
-                       <span class="text-[9px] text-gray-500 font-mono">ID: {{ vehicle.dealer }}</span>
-                    </div>
-
-                    <!-- Chat Messages list -->
-                    <div id="demo-chat-feed" class="flex-grow p-4 space-y-3 overflow-y-auto max-h-[170px] text-xs">
-                       @for (msg of chatMessages(); track msg.id) {
-                          <div class="flex flex-col" [ngClass]="{'items-end': msg.sender === 'Buyer', 'items-start': msg.sender !== 'Buyer'}">
-                             <span class="text-[9px] text-gray-500 mb-0.5">{{ msg.sender }} &middot; {{ msg.timestamp }}</span>
-                             <div class="px-3.5 py-2 rounded-xl max-w-[85%] leading-normal animate-luxury-reveal" 
-                                  [ngClass]="{
-                                    'bg-driveway-gold text-black rounded-tr-none font-medium': msg.sender === 'Buyer', 
-                                    'bg-white/10 text-white rounded-tl-none': msg.sender === 'Seller',
-                                    'bg-red-500/15 text-[#ef4444] border border-red-500/25 rounded-lg text-center font-bold tracking-wide text-[10.5px] p-2': msg.sender === 'System'
-                                  }">
-                                {{ msg.text }}
-                             </div>
-                          </div>
-                       }
-                    </div>
-
-                    <!-- Instant typing contact bypass detector display -->
-                    @if (typingBypassNotice()) {
-                       <div class="bg-[#ef4444]/15 border-t border-red-500/30 p-2 text-[10px] text-red-400 flex items-start gap-1.5 animate-pulse font-medium">
-                          <mat-icon class="text-[13px] w-3.5 h-3.5 mt-0.5 shrink-0">report_problem</mat-icon>
-                          <span>Bypass warning: cell digit or private app strings detected. Platform filters protect safety.</span>
-                       </div>
-                    }
-
-                    <!-- Input message box -->
-                    <div class="p-3 border-t border-white/10 flex items-center gap-2">
-                       <input type="text" 
-                              #msgInput
-                              (keyup)="checkTypingBypass(msgInput.value)"
-                              (keydown.enter)="sendChatMessage(msgInput); msgInput.value = ''"
-                              placeholder="Type consult message..." 
-                              class="flex-1 h-9 px-3 rounded-lg bg-white/5 border border-white/10 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-driveway-gold focus:bg-white/10 transition-all font-light outline-none" />
-                       
-                       <button (click)="sendChatMessage(msgInput); msgInput.value = ''" class="button-magnetic w-9 h-9 bg-driveway-cyan text-black rounded-lg flex items-center justify-center hover:bg-cyan-400 transition-all shrink-0">
-                          <mat-icon class="text-[16px] w-4.5 h-4.5">send</mat-icon>
-                       </button>
-                    </div>
-                 </div>
-              </div>
-          </div>
-       </div>
-    }
-  `,
+  imports: [MatIconModule, NgClass, CommonModule, RouterLink, HeaderComponent, FooterComponent, VehicleCardComponent],
+  templateUrl: './home.html',
   styles: [`
-    .hide-scrollbar::-webkit-scrollbar {
-       display: none;
+    .scrollbar-hidden::-webkit-scrollbar {
+      display: none;
     }
-    .hide-scrollbar {
-       -ms-overflow-style: none;
-       scrollbar-width: none;
+    .scrollbar-hidden {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideLeft {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes slideUp {
+      0% { transform: translateY(100%); }
+      100% { transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-slideLeft {
+      animation: slideLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-slideUp {
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
   `]
 })
 export class HomeComponent implements OnInit {
-  isLoaded = signal(false);
-  isFilterLoading = signal(false);
   platformState = inject(PlatformStateService);
+  router = inject(Router);
 
-  // Scroll offset signals for calculated luxury parallax
-  scrollY = signal<number>(0);
-  smoothScrollY = signal<number>(0);
-  private scrollLerpActive = false;
+  isLoaded = signal(false);
+  activeMockupScreen = signal<'showroom' | 'buyer' | 'seller' | 'broker' | 'inspector' | 'delivery' | 'admin' | 'vehicledetails' | 'negotiations' | 'logistics' | 'loading' | 'auth'>('showroom');
+  showSimulatorBar = signal(true);
 
-  // Escrow live statistics counters
-  escrowCounter = signal(0);
-  inspectionCounter = signal(0);
-  bypassCounter = signal(100);
-  arbitrationCounter = signal(0);
+  // Settings profile editing state signals
+  settingsProfileName = signal('');
+  settingsProfilePhone = signal('');
+  settingsProfileAddress = signal('');
+  settingsProfileNotification = signal(true);
+  showProfileSaveSuccess = signal(false);
 
-  // Filter & Search Signals binds
-  searchQuery = signal<string>('');
-  activeFilter = signal<string>('All Vehicles');
+  // Active chat details in Settings tab
+  selectedChatVehicleId = signal<string | null>(null);
+  activeChatMessageText = signal('');
+  isDealerChatTyping = signal(false);
+  settingsNegotiationHistory = signal<{sender: string, text: string, isOffer?: boolean, offerAmount?: string, time: string}[]>([]);
 
-  // Modal selector states
+  // Active Main UI Toggling Tab Signal
+  activeTab = signal<'showroom' | 'buy' | 'concierge' | 'sell' | 'services' | 'ai'>('showroom');
+  activeSellerTab = signal<'dashboard' | 'listings' | 'offers' | 'messages' | 'add-car'>('dashboard');
+
+  // Unified Search state filters
+  searchQuery = signal('');
+  selectedMake = signal('All');
+  selectedLocation = signal('All');
+  selectedFuel = signal('All');
+  minHealthScore = signal(80);
+  minTrustScore = signal(80);
+  maxPrice = signal(300000000);
+  onlyVerifiedSellers = signal(false);
+  onlyVerifiedBrokers = signal(false);
+
+  // Selected Overlay references
   selectedVehicle = signal<Vehicle | null>(null);
-  purchaseRef = signal<string | null>(null);
+  activeVehicleTab = signal<'dna' | 'score' | 'specs'>('dna');
+  calculatingOfferVehicle = signal<Vehicle | null>(null);
 
-  // Instantly computed active chats matching active dialog vehicle ID
-  chatMessages = computed(() => {
-    const v = this.selectedVehicle();
-    return v ? this.platformState.getChatForVehicle(v.id)() : [];
-  });
+  // Compare matrices tracking
+  comparedVehicleIds = signal<string[]>([]);
 
-  typingBypassNotice = signal<boolean>(false);
+  // Sourcing services launch context
+  customSourcingMake = signal('');
+  customSourcingModel = signal('');
+  customSourcingYear = signal('');
+  customSourcingBudget = signal('');
+  customSourcingComments = signal('');
+  activeServicesSubTab = signal<'sourcing' | 'escrow'>('sourcing');
 
-  // Quick categories filters definition
-  quickFilters = [
-    { label: 'All Vehicles', active: true },
-    { label: 'Verified Only', icon: '✨' },
-    { label: 'Luxury Offers', icon: '💎' },
-    { label: 'SUVs', icon: '⛰️' },
-    { label: 'Electric & Hybrid', icon: '⚡' },
-    { label: 'Under ₦50M', icon: '💰' },
-    { label: 'First-Time Buyers', icon: '🔰' }
-  ];
+  // Proposals draft state
+  draftingProposalForRequestId = signal<string | null>(null);
+  activeSourcingProposalVehicleDetails = signal('');
+  activeSourcingProposalPrice = signal('');
+  activeSourcingProposalCommission = signal('2.5%');
 
-  // COMPUTED RAILS METRICS FOR DISCOVERY SHELVES
-  topPicksList = computed(() => {
-    return this.platformState.approvedListings().filter(v => v.isVerified && parseInt(v.score) >= 94);
-  });
+  // Escrow logistic status updater fields
+  logisticsStatusText = signal('');
+  logisticsProofNotes = signal('');
 
-  recentlyInspectedList = computed(() => {
-    return this.platformState.approvedListings().filter(v => parseInt(v.score) >= 90).slice(0, 4);
-  });
+  // Seller onboarding CAC step pipeline details
+  onboardingStep = signal(1);
+  dealerCompanyName = signal('');
+  dealerCAC = signal('');
+  dealerYears = signal(3);
+  dealerInventory = signal('10-50 cars');
+  dealerBankName = signal('');
+  dealerBankNumber = signal('');
+  uploadedDocuments = signal<{ name: string; type: string }[]>([]);
 
-  premiumCollectionList = computed(() => {
-    return this.platformState.approvedListings().filter(v => parseInt(v.price.replace(/,/g, '')) >= 100000000 || v.make === 'Porsche');
-  });
+  // AI chat advisor vectors
+  aiQueryText = signal('');
+  aiConversations = signal<{ sender: 'User' | 'AI'; text: string }[]>([
+    { sender: 'AI', text: 'Welcome to the Carvello AI Deep-Research System. I can analyze diagnostic SOH scores, provide market valuations, or check physical mechanical specs. Try querying or clicking a prompt below.' }
+  ]);
+  aiThinking = signal(false);
 
-  suvCollectionList = computed(() => {
-    return this.platformState.approvedListings().filter(v => 
-      v.model.toLowerCase().includes('rx') || 
-      v.model.toLowerCase().includes('cruiser') || 
-      v.model.toLowerCase().includes('rover') ||
-      v.model.toLowerCase().includes('palisade') ||
-      v.model.toLowerCase().includes('gle')
-    );
-  });
+  // Active rotate viewpoint showcasing
+  currentShowcaseAngleIndex = signal(0);
+  showcaseAngles = signal<string[]>([
+    'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop'
+  ]);
 
-  budgetCollectionList = computed(() => {
-    return this.platformState.approvedListings().filter(v => parseInt(v.price.replace(/,/g, '')) <= 50000000);
-  });
+  // Carvello Concierge™ Signals
+  conciergePrompt = signal<string>('');
+  isAnalyzingConcierge = signal<boolean>(false);
+  extractedMake = signal<string>('');
+  extractedModel = signal<string>('');
+  extractedYear = signal<string>('');
+  extractedBudget = signal<string>('');
+  extractedLocation = signal<string>('');
+  extractedColor = signal<string>('');
+  showExtractedReview = signal<boolean>(false);
+  selectedRequestForOffers = signal<SourcingRequest | null>(null);
+  conciergeStatusLogs = signal<string[]>([]);
 
-  electricCollectionList = computed(() => {
-    return this.platformState.approvedListings().filter(v =>  v.fuel === 'Electric' || v.fuel === 'Hybrid');
-  });
+  // Sourcing Request preloaded mock list
+  mockSourcingRequests = computed(() => this.platformState.getSourcingRequests());
 
-  // Dynamic lists from state used for searching and filtering
-  filteredVehiclesList = computed(() => {
-    let list = this.platformState.approvedListings();
-    const query = this.searchQuery().toLowerCase().trim();
-    const filter = this.activeFilter();
-
-    if (query) {
-      list = list.filter(v => 
-        v.make.toLowerCase().includes(query) || 
-        v.model.toLowerCase().includes(query) || 
-        v.dealer.toLowerCase().includes(query) ||
-        v.year.includes(query)
-      );
-    }
-
-    if (filter === 'Verified Only') {
-      list = list.filter(v => v.isVerified);
-    } else if (filter === 'Luxury Offers') {
-      list = list.filter(v => parseInt(v.price.replace(/,/g, '')) >= 100000000 || v.make === 'Porsche');
-    } else if (filter === 'SUVs') {
-      list = list.filter(v => 
-        v.model.toLowerCase().includes('rx') || 
-        v.model.toLowerCase().includes('cruiser') || 
-        v.model.toLowerCase().includes('rover') ||
-        v.model.toLowerCase().includes('palisade') ||
-        v.model.toLowerCase().includes('gle')
-      );
-    } else if (filter === 'Electric & Hybrid') {
-      list = list.filter(v => v.fuel === 'Electric' || v.fuel === 'Hybrid');
-    } else if (filter === 'Under ₦50M') {
-      list = list.filter(v => parseInt(v.price.replace(/,/g, '')) <= 50000000);
-    } else if (filter === 'First-Time Buyers') {
-      list = list.filter(v => parseInt(v.price.replace(/,/g, '')) <= 35000000 && v.isVerified);
-    }
-
-    return list;
-  });
-
-  // HostListener updates scrolling position with extreme resolution on hardware frames
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-     this.scrollY.set(window.scrollY);
-     this.triggerSmoothScroll();
-  }
-
-  private triggerSmoothScroll() {
-     if (this.scrollLerpActive) return;
-     this.scrollLerpActive = true;
-     requestAnimationFrame(() => this.tickSmoothScroll());
-  }
-
-  // Linear interpolation loop inside requestAnimationFrame ticker
-  private tickSmoothScroll() {
-     const target = this.scrollY();
-     const current = this.smoothScrollY();
-     const diff = target - current;
-     
-     if (Math.abs(diff) < 0.25) {
-        this.smoothScrollY.set(target);
-        this.scrollLerpActive = false;
-     } else {
-        this.smoothScrollY.set(current + diff * 0.085); // weighted luxury factor
-        requestAnimationFrame(() => this.tickSmoothScroll());
-     }
-  }
-
-  // Parallax calculations linked to GPU composition nodes via smoothScrollY
-  heroImgStyle = computed(() => {
-     const y = Math.min(this.smoothScrollY() * 0.38, 260);
-     const scale = 1.04 + (this.smoothScrollY() * 0.00018);
-     return `translate3d(0, ${y}px, 0) scale(${scale})`;
-  });
-
-  heroTextStyle = computed(() => {
-     const y = Math.min(this.smoothScrollY() * 0.12, 120);
-     return `perspective(1200px) rotateX(3.5deg) rotateY(-6.5deg) translate3d(0, ${y}px, 0)`;
-  });
-
-  sidePanelStyle = computed(() => {
-     const y = Math.min(this.smoothScrollY() * 0.22, 150);
-     return `translate3d(0, ${y}px, 0)`;
-  });
-
-  bannerParallaxStyle = computed(() => {
-     const scroll = this.smoothScrollY();
-     const y = Math.max(-50, Math.min(50, (scroll - 1700) * 0.07));
-     return `translate3d(0, ${y}px, 0) scale(1.15)`;
+  activeProposalsForSelectedRequest = computed(() => {
+    const req = this.selectedRequestForOffers();
+    if (!req) return [];
+    return this.platformState.getSourcingProposals().filter(p => p.requestId === req.id);
   });
 
   ngOnInit() {
+    this.isLoaded.set(true);
+
+    // Initialize the settings fields from active session
+    const userObj = this.platformState.getSession();
+    this.settingsProfileName.set(userObj?.fullName || 'Jordan Williams');
+    this.settingsProfilePhone.set(userObj?.phone || '+234 81 0522 9384');
+    this.settingsProfileAddress.set(userObj?.address || 'Plot 104, Lekki Phase 1, Lagos');
+    
+    // Seed default concierge order if none exists, so the UI is immediately glorious on first load
+    if (this.platformState.getSourcingRequests().length === 0) {
+      const defaultId = this.platformState.submitSourcingRequest({
+        buyerName: 'Jordan Williams',
+        buyerEmail: 'jordanwill366@gmail.com',
+        vehicleMake: 'Lexus',
+        vehicleModel: 'RX 350',
+        yearRange: '2021',
+        budgetNaira: '45,000,000',
+        comments: 'Bespoke Concierge placement: Immaculate Silver paint configuration specified for Lekki delivery channels.'
+      });
+      
+      const found = this.platformState.getSourcingRequests().find(r => r.id === defaultId);
+      if (found) {
+        this.selectedRequestForOffers.set(found);
+      }
+    } else {
+      // Set the first active request as selected by default to ensure maximum immediate beauty!
+      const reqs = this.platformState.getSourcingRequests();
+      if (reqs && reqs.length > 0) {
+        this.selectedRequestForOffers.set(reqs[0]);
+      }
+    }
+  }
+
+  analyzeConciergePrompt(presetText?: string) {
+    const text = presetText || this.conciergePrompt();
+    if (!text) return;
+    
+    if (presetText) {
+      this.conciergePrompt.set(presetText);
+    }
+
+    this.isAnalyzingConcierge.set(true);
+    this.showExtractedReview.set(false);
+    this.conciergeStatusLogs.set([]);
+
+    const addLog = (log: string, delay: number) => {
+      setTimeout(() => {
+        this.conciergeStatusLogs.update(logs => [...logs, log]);
+      }, delay);
+    };
+
+    addLog("Amara Okanlawon: Securing satellite telemetry and CAC directories...", 300);
+    addLog("Analyzing linguistic intents of requirements...", 800);
+    addLog("Extracting legal budget limits and vehicle mechanical specs...", 1300);
+    addLog("Cross-referencing verified dealer stock indices...", 1800);
+    addLog("Personal Sourcing Brief details parsed successfully.", 2200);
+
     setTimeout(() => {
-      this.isLoaded.set(true);
-      this.initIntersectionObserver();
+      const lower = text.toLowerCase();
+      let make = 'Toyota';
+      if (lower.includes('lexus')) make = 'Lexus';
+      else if (lower.includes('benz') || lower.includes('mercedes')) make = 'Mercedes-Benz';
+      else if (lower.includes('range') || lower.includes('rover')) make = 'Range Rover';
+      else if (lower.includes('honda')) make = 'Honda';
+
+      let model = 'Camry';
+      if (lower.includes('rx350') || lower.includes('rx 350') || lower.includes('rx')) model = 'RX 350';
+      else if (lower.includes('gle')) model = 'GLE 450';
+      else if (lower.includes('autobiography')) model = 'Autobiography LWB';
+      else if (lower.includes('accord')) model = 'Accord';
+      else if (lower.includes('land cruiser') || lower.includes('lc300')) model = 'Land Cruiser';
+
+      let year = '2022';
+      const yearMatch = text.match(/\b(201\d|202\d)\b/);
+      if (yearMatch) year = yearMatch[0];
+
+      let budget = '18,500,000';
+      if (lower.includes('18 million') || lower.includes('18m') || lower.includes('18,000,000')) budget = '18,000,000';
+      else if (lower.includes('45 million') || lower.includes('45m') || lower.includes('45,000,000')) budget = '45,000,000';
+      else if (lower.includes('300 million') || lower.includes('300m') || lower.includes('300,000,000')) budget = '300,000,000';
+      else {
+        const numMatch = text.match(/[\d,]+(?=\s*(?:million|m|₦))/);
+        if (numMatch) {
+          const parsedNum = parseFloat(numMatch[0].replace(/,/g, ''));
+          if (parsedNum < 1000) budget = (parsedNum * 1000000).toLocaleString();
+        }
+      }
+
+      let location = 'Lagos';
+      if (lower.includes('abuja') || lower.includes('maitama') || lower.includes('gwarinpa')) location = 'Abuja';
+      else if (lower.includes('lekki')) location = 'Lagos (Lekki)';
+      else if (lower.includes('port') || lower.includes('harcourt')) location = 'Port Harcourt';
+
+      let color = 'Black';
+      if (lower.includes('silver')) color = 'Silver';
+      else if (lower.includes('white')) color = 'White';
+      else if (lower.includes('grey') || lower.includes('gray')) color = 'Grey';
+      else if (lower.includes('blue')) color = 'Blue';
+
+      this.extractedMake.set(make);
+      this.extractedModel.set(model);
+      this.extractedYear.set(year);
+      this.extractedBudget.set(budget);
+      this.extractedLocation.set(location);
+      this.extractedColor.set(color);
+
+      this.isAnalyzingConcierge.set(false);
+      this.showExtractedReview.set(true);
+    }, 2400);
+  }
+
+  submitConciergeRequest() {
+    const make = this.extractedMake();
+    const model = this.extractedModel();
+    const year = this.extractedYear();
+    const budget = this.extractedBudget();
+    const col = this.extractedColor();
+    const loc = this.extractedLocation();
+
+    const reqId = this.platformState.submitSourcingRequest({
+      buyerName: this.activeUser()?.fullName || 'Jordan Williams',
+      buyerEmail: this.activeUser()?.email || 'jordanwill366@gmail.com',
+      vehicleMake: make,
+      vehicleModel: model,
+      yearRange: year,
+      budgetNaira: parseFloat(budget.replace(/,/g, '')).toLocaleString(),
+      comments: `Bespoke Concierge placement: Immaculate ${col} exterior paint configuration specified for ${loc} delivery channels.`
+    });
+
+    this.conciergePrompt.set('');
+    this.showExtractedReview.set(false);
+    
+    setTimeout(() => {
+      const updatedReqs = this.platformState.getSourcingRequests();
+      const found = updatedReqs.find(r => r.id === reqId);
+      if (found) {
+        this.selectedRequestForOffers.set(found);
+      }
     }, 100);
   }
 
-  scrollToInventory() {
-    if (typeof window === 'undefined') return;
-    const el = document.getElementById('sticky-filters');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Approved vehicles listing getters
+  approvedListings = computed(() => {
+    return this.platformState.getListings().filter(x => x.status === 'Approved' || x.isVerified);
+  });
+
+  availableMakes = computed(() => {
+    const brands = this.approvedListings().map(x => x.make);
+    return Array.from(new Set(brands)).sort();
+  });
+
+  availableLocations = computed(() => {
+    const locs = this.approvedListings().map(x => x.location);
+    return Array.from(new Set(locs)).sort();
+  });
+
+  isSearchActive = computed(() => {
+    return this.searchQuery().trim().length > 0 ||
+           this.selectedMake() !== 'All' ||
+           this.selectedLocation() !== 'All' ||
+           this.selectedFuel() !== 'All' ||
+           this.minHealthScore() > 80 ||
+           this.minTrustScore() > 80 ||
+           this.maxPrice() < 300000000 ||
+           this.onlyVerifiedSellers() ||
+           this.onlyVerifiedBrokers();
+  });
+
+  // Filter listings based on criteria
+  filteredListings = computed(() => {
+    return this.approvedListings().filter(car => {
+      if (this.searchQuery().trim().length > 0) {
+        const term = this.searchQuery().toLowerCase();
+        const text = `${car.make} ${car.model} ${car.year} ${car.dealer}`.toLowerCase();
+        if (!text.includes(term)) return false;
+      }
+      if (this.selectedMake() !== 'All' && car.make !== this.selectedMake()) return false;
+      if (this.selectedLocation() !== 'All' && car.location !== this.selectedLocation()) return false;
+      if (this.selectedFuel() !== 'All' && car.fuel !== this.selectedFuel()) return false;
+      
+      const rawPrice = parseInt(car.price.replace(/,/g, ''), 10);
+      if (!isNaN(rawPrice) && rawPrice > this.maxPrice()) return false;
+
+      const details = car.inspectionDetails;
+      if (details) {
+        const health = Math.round((details.engineRating + details.transmissionRating + details.bodyRating) / 3);
+        if (health < this.minHealthScore()) return false;
+      }
+      const scoreNum = parseInt(car.score, 10);
+      if (!isNaN(scoreNum) && scoreNum < this.minTrustScore()) return false;
+
+      if (this.onlyVerifiedSellers() && !car.isVerified) return false;
+      if (this.onlyVerifiedBrokers()) {
+        const hasBrokerBacking = ['porsche', 'lexus', 'land rover', 'mercedes'].some(m => car.make.toLowerCase().includes(m));
+        if (!hasBrokerBacking) return false;
+      }
+      return true;
+    });
+  });
+
+  curatedShelves = computed(() => {
+    const list = this.approvedListings();
+    return [
+      {
+        id: 'for_you',
+        title: 'Deep AI Recommended Matches',
+        desc: 'Precision mechanical clearances and low-depreciation assets handpicked for your profile.',
+        items: list.filter(v => parseInt(v.score) >= 94)
+      },
+      {
+        id: 'luxury_room',
+        title: 'Luxury Collector Suite',
+        desc: 'Exquisite elite tiers of performance Engineering and heritage prestige brands.',
+        items: list.filter(v => parseInt(v.price.replace(/,/g, ''), 10) >= 80000000)
+      },
+      {
+        id: 'suv_explorers',
+        title: 'Prestige SUV & SOH Explorers',
+        desc: 'High-clearance road trip tranquility matched with dual-powertrain hybrid synergy.',
+        items: list.filter(v => ['suv', 'awd', 'rx', 'cruiser', 'rover', 'gle'].some(k => v.model.toLowerCase().includes(k) || v.make.toLowerCase().includes(k)))
+      }
+    ];
+  });
+
+  // Favorite managers
+  isSaved(id: string): boolean {
+    return this.platformState.savedVehicleIds().includes(id);
+  }
+
+  saveVehicle(id: string) {
+    this.platformState.toggleFavorite(id);
+  }
+
+  isCompared(id: string): boolean {
+    return this.comparedVehicleIds().includes(id);
+  }
+
+  toggleCompareVehicle(id: string) {
+    this.comparedVehicleIds.update(ids =>
+      ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id]
+    );
+  }
+
+  comparedListings = computed(() => {
+    return this.platformState.getListings().filter(x => this.comparedVehicleIds().includes(x.id));
+  });
+
+  activeUser = computed(() => this.platformState.getSession());
+
+  hasRole(role: UserAccount['role']): boolean {
+    const s = this.activeUser();
+    return !!(s && s.unlockedRoles?.includes(role));
+  }
+
+  // Swipers rotates indicators
+  onRotateShowcase(dir: number) {
+    let nextIdx = this.currentShowcaseAngleIndex() + dir;
+    if (nextIdx < 0) nextIdx = this.showcaseAngles().length - 1;
+    if (nextIdx >= this.showcaseAngles().length) nextIdx = 0;
+    this.currentShowcaseAngleIndex.set(nextIdx);
+  }
+
+  // Settings State Managers and Simulation Methods
+  saveSettingsProfile() {
+    const active = this.platformState.getSession();
+    if (active) {
+      active.fullName = this.settingsProfileName();
+      active.phone = this.settingsProfilePhone();
+      active.address = this.settingsProfileAddress();
+      this.platformState.setSession(active);
     }
-  }
-
-  private initIntersectionObserver() {
-     if (typeof window === 'undefined') return;
-     
-     // 1. General scroll reveal entries for luxury fade-in shifts
-     const items = document.querySelectorAll('.scroll-reveal');
-     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-           if (entry.isIntersecting) {
-              entry.target.classList.add('active');
-           }
-        });
-     }, {
-        threshold: 0.06,
-        rootMargin: '0px 0px -40px 0px'
-     });
-     
-     items.forEach(el => observer.observe(el));
-
-     // 2. Escrow counts row trigger
-     const statsSection = document.getElementById('stats-row');
-     if (statsSection) {
-        const statsObserver = new IntersectionObserver((entries) => {
-           entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                 this.animateCounters();
-                 statsObserver.unobserve(entry.target);
-              }
-           });
-        }, { threshold: 0.1 });
-        statsObserver.observe(statsSection);
-     }
-  }
-
-  // Dual timing interpolation ticker for trust counters
-  private animateCounters() {
-     const duration = 2200; // 2.2 seconds counting curves
-     const startTime = performance.now();
-     
-     const step = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Custom easing cubic out for statistic ticks
-        const ease = 1 - Math.pow(1 - progress, 3);
-        
-        this.escrowCounter.set(Math.round(ease * 42.5 * 10) / 10);
-        this.inspectionCounter.set(Math.round(ease * 100));
-        this.bypassCounter.set(Math.round((1 - ease) * 100));
-        this.arbitrationCounter.set(Math.round(ease * 14));
-        
-        if (progress < 1) {
-           requestAnimationFrame(step);
-        }
-     };
-     
-     requestAnimationFrame(step);
-  }
-
-  onSearchChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value);
-  }
-
-  clearSearch() {
-    this.searchQuery.set('');
-  }
-
-  selectFilter(label: string) {
-    if (this.activeFilter() === label) return;
-    
-    // Trigger premium skeleton loading sequence
-    this.isFilterLoading.set(true);
-    this.activeFilter.set(label);
-    
+    this.showProfileSaveSuccess.set(true);
     setTimeout(() => {
-       this.isFilterLoading.set(false);
-       // Re-trigger Intersection Observer on newly rendered cards
-       setTimeout(() => this.initIntersectionObserver(), 50);
-    }, 600);
-
-    if (label !== 'All Vehicles') {
-       // Scroll smoothly to active filters container overlay
-       const element = document.getElementById('sticky-filters');
-       if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-       }
-    }
+      this.showProfileSaveSuccess.set(false);
+    }, 3000);
   }
 
-  resetAllFilters() {
-    this.searchQuery.set('');
-    this.activeFilter.set('All Vehicles');
+  getSavedVehiclesList = computed(() => {
+    const list = this.platformState.getListings();
+    const savedIds = this.platformState.savedVehicleIds();
+    return list.filter(v => savedIds.includes(v.id));
+  });
+
+  removeSavedVehicle(id: string, event: Event) {
+    event.stopPropagation();
+    this.platformState.toggleFavorite(id);
   }
 
-  openDetailView(vehicle: Vehicle) {
-    this.selectedVehicle.set(vehicle);
-    this.purchaseRef.set(null); // Reset escrow trigger states
-  }
-
-  closeDetailView() {
-    this.selectedVehicle.set(null);
-    this.purchaseRef.set(null);
-  }
-
-  exerciseEscrowPurchase(vehicle: Vehicle) {
-    const ref = this.platformState.purchaseVehicle(vehicle);
-    this.purchaseRef.set(ref);
-  }
-
-  checkTypingBypass(text: string) {
-    const phoneRegex = /(?:(?:\+?234|0)[789][01]\d{8})|(?:\d{4,11})/g;
-    const whatsappKeywords = /(whatsapp|whatsapp me|wa\.me|telegram|call me|dm me|phone number|direct pay|pay to my bank|account number|0803|0802|0805|0812|090)/i;
+  openSettingsChatForVehicle(carId: string) {
+    this.selectedChatVehicleId.set(carId);
     
-    const matchedPhone = text.match(phoneRegex);
-    const matchedKeyword = text.match(whatsappKeywords);
+    // Seed preloaded realistic negotiation history based on vehicle
+    const car = this.platformState.getListings().find(v => v.id === carId);
+    const title = car ? `${car.make} ${car.model}` : 'Vehicle';
+    const dealerName = car ? car.dealer : 'Verified Dealer Representative';
+    
+    // Check if there is an existing counteroffer recorded in state
+    const relatedOffer = this.platformState.getStructuredOffers().find(o => o.vehicleId === carId);
+    const offerAmountText = relatedOffer ? relatedOffer.buyerOffer : '38,000,000';
 
-    this.typingBypassNotice.set(!!((matchedPhone && matchedPhone.join('').length >= 6) || matchedKeyword));
+    this.settingsNegotiationHistory.set([
+      {
+        sender: dealerName,
+        text: `Greetings from the showroom. I represent ${dealerName}. We noticed your interest in the certified ${title}. Let me know if you would like me to dispatch the 150-Point Physical Inspection sheet for your review.`,
+        time: 'Yesterday, 4:15 PM'
+      },
+      {
+        sender: 'You',
+        text: `Hi! Yes, I want to verify the engine health score and ensure there is a clear dual-approval escrow pipeline in place before proceeding.`,
+        time: 'Yesterday, 4:30 PM'
+      },
+      {
+        sender: dealerName,
+        text: `Absolutely. Our inspection reports are certified permanent logs on the Carvello DNA™ blockchain ledger. We are willing to negotiate. What is your competitive counterproposal?`,
+        time: 'Yesterday, 4:45 PM'
+      },
+      {
+        sender: 'You',
+        text: `I would like to offer ₦${offerAmountText} with logistics flatbed transport delivery options to my address.`,
+        isOffer: true,
+        offerAmount: `₦${offerAmountText}`,
+        time: 'Today, 10:11 AM'
+      },
+      {
+        sender: dealerName,
+        text: `Understood. Your counteroffer of ₦${offerAmountText} is queued. Awaiting structural validation from our sourcing floor. We will respond shortly with administrative feedback.`,
+        time: 'Today, 10:15 AM'
+      }
+    ]);
   }
 
-  sendChatMessage(input: HTMLInputElement) {
-    const text = input.value.trim();
-    const v = this.selectedVehicle();
-    if (text && v) {
-       this.platformState.postMessage(v.id, 'Buyer', text);
-       this.typingBypassNotice.set(false);
+  sendChatMessageInput() {
+    const text = this.activeChatMessageText().trim();
+    if (!text) return;
+
+    // Add User message
+    this.settingsNegotiationHistory.update(list => [...list, {
+      sender: 'You',
+      text: text,
+      time: 'Just now'
+    }]);
+
+    this.activeChatMessageText.set('');
+    this.isDealerChatTyping.set(true);
+
+    // Simulate dealer typing delay
+    setTimeout(() => {
+      this.isDealerChatTyping.set(false);
+      
+      this.settingsNegotiationHistory.update(list => [...list, {
+        sender: 'Dealer Representative',
+        text: `Carvello Escrow Matrix Sync: Received. Our logistics floor has acknowledged your premium inquiry. We are preparing to dispatch flatbed transport options depending on physical location confirmation. Click "Accept & Start Transport" above to lock the deal!`,
+        time: 'Just now'
+      }]);
+    }, 1800);
+  }
+
+  getVehicleById(id: string): Vehicle | undefined {
+    return this.platformState.getListings().find(v => v.id === id);
+  }
+
+  acceptEscrowDeal(carId: string) {
+    const car = this.platformState.getListings().find(v => v.id === carId);
+    if (!car) return;
+    this.instantBuy(car);
+    this.platformState.showSettings.set(true);
+    this.platformState.activeSettingsTab.set('Activity');
+    alert(`Ecosystem Protection: Escrow allocated and secured. Your deal for certified ${car.make} ${car.model} is finalized! Check the Activity Log to monitor physical progress.`);
+  }
+
+  // Active operations
+  openVehicleDeets(car: Vehicle) {
+    // Dynamically query 360 images based on the car image to make it realistic!
+    this.showcaseAngles.set([
+      car.image,
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1200&auto=format&fit=crop'
+    ]);
+    this.currentShowcaseAngleIndex.set(0);
+    this.selectedVehicle.set(car);
+  }
+
+  closeVehicleDeets() {
+    this.selectedVehicle.set(null);
+  }
+
+  openOfferCalculator(v: Vehicle) {
+    this.selectedVehicle.set(null);
+    this.calculatingOfferVehicle.set(v);
+  }
+
+  closeOfferCalculator() {
+    this.calculatingOfferVehicle.set(null);
+  }
+
+  submitOfferProposal(v: Vehicle, valInput: HTMLInputElement) {
+    const val = valInput.value.trim().replace(/,/g, '');
+    if (!val || isNaN(parseFloat(val))) {
+      alert('Security Audit: Enter valid counterproposal digits e.g. 42000000.');
+      return;
     }
+    const formatted = parseFloat(val).toLocaleString();
+    this.platformState.submitStructuredOffer({
+      vehicleId: v.id,
+      buyerEmail: this.activeUser()?.email || 'jordanwill366@gmail.com',
+      buyerName: this.activeUser()?.fullName || 'Jordan Williams',
+      sellerPrice: v.price,
+      buyerOffer: formatted
+    });
+
+    alert(`Carvello Escrow Matrix: Counter-offer of ₦${formatted} dispatched autonomously to seller system.`);
+    this.closeOfferCalculator();
+    
+    // Switch to Negotiations sub tab settings
+    this.platformState.showSettings.set(true);
+    this.platformState.activeSettingsTab.set('Negotiations');
   }
 
-  // Real world automotive guides & reviews
-  articles = [
-     {
-        title: "The 2026 Shift: Why Escrow is Mandatory for Luxury Imports",
-        category: "Market Insights",
-        readTime: 5,
-        excerpt: "An in-depth look at how the Driveway247 escrow protocol has eliminated 98% of luxury vehicle import fraud in Nigeria.",
-        image: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=800&auto=format&fit=crop"
-     },
-     {
-        title: "Top 5 SUVs for Lagos Roads Under ₦30M",
-        category: "Safety Guide",
-        readTime: 8,
-        excerpt: "From the resilient Lexus RX to the versatile Toyota Highlander, we analyze the best mid-range SUVs tested for Nigerian terrain.",
-        image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=800&auto=format&fit=crop"
-     },
-     {
-        title: "Inside the 150-Point Inspection Process",
-        category: "Trust & Verification",
-        readTime: 4,
-        excerpt: "Follow our certified field officers as they verify a Mercedes-Benz G-Wagon before it's approved for listing on the platform.",
-        image: "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=800&auto=format&fit=crop"
-     }
-  ];
+  instantBuy(v: Vehicle) {
+    const txId = this.platformState.purchaseVehicle(v);
+    alert(`Collateral Vault: Escrow allocations secured for Transaction ${txId} holding ₦${v.price}. logistics flatbed tracking log dispatch is configured.`);
+    this.selectedVehicle.set(null);
+    
+    this.platformState.showSettings.set(true);
+    this.platformState.activeSettingsTab.set('Activity');
+    
+    this.activeTab.set('services');
+    this.activeServicesSubTab.set('escrow');
+  }
 
-  testimonials = [
-     {
-        name: "Hon. Gbolahan Afolabi",
-        role: "Luxury Vehicle Buyer",
-        location: "Maitama, Abuja",
-        initials: "GA",
-        text: "I was extremely skeptical about buying a 115 million Land Cruiser 300 Series from a local Lagos dealer. Under Driveway247's lock escrow protocol, my bank deposit was completely safe until the vehicle was physically signed off and verified by my Abuja legal team. Absolute engineering masterstroke."
-     },
-     {
-        name: "Engr. Sandra Eze",
-        role: "Certified Field operations inspector",
-        location: "Lekki, Lagos",
-        initials: "SE",
-        text: "We don't do standard checks. We do strict on-site mechanical diagnostic scans. We verify body fillers, structural welds, computer error histories & VIN records. This platform is the operating system Africa's vehicle marketplace has been waiting for."
-     },
-     {
-        name: "Alhaji Musa Yusuf",
-        role: "Royal Autos Dealership Lead",
-        location: "Ikeja, Lagos",
-        initials: "MY",
-        text: "Direct buyer negotiation typically introduces massive payment tracking complications. Escrow transaction coordination through Driveway247 has streamlined our wholesale logistics. We ship verified units with confidence, knowing payout settlement is locked in safe state."
-     }
-  ];
+  activeTransactions = computed(() => this.platformState.getTransactions());
+  structuredOffers = computed(() => this.platformState.getStructuredOffers());
+
+  // Input bindings
+  onBusinessInput(ev: Event) { this.dealerCompanyName.set((ev.target as HTMLInputElement).value); }
+  onCACInput(ev: Event) { this.dealerCAC.set((ev.target as HTMLInputElement).value); }
+  onYearsInput(ev: Event) { this.dealerYears.set(parseInt((ev.target as HTMLInputElement).value, 10) || 1); }
+  onInventorySelect(ev: Event) { this.dealerInventory.set((ev.target as HTMLSelectElement).value); }
+  onBankNameInput(ev: Event) { this.dealerBankName.set((ev.target as HTMLInputElement).value); }
+  onBankNoInput(ev: Event) { this.dealerBankNumber.set((ev.target as HTMLInputElement).value); }
+
+  resetFilters() {
+    this.searchQuery.set('');
+    this.selectedMake.set('All');
+    this.selectedLocation.set('All');
+    this.selectedFuel.set('All');
+    this.minHealthScore.set(80);
+    this.minTrustScore.set(80);
+    this.maxPrice.set(300000000);
+    this.onlyVerifiedSellers.set(false);
+    this.onlyVerifiedBrokers.set(false);
+  }
+
+  onMakeSelect(event: Event) {
+    const val = (event.target as HTMLSelectElement).value;
+    this.selectedMake.set(val);
+  }
+
+  onLocationSelect(event: Event) {
+    const val = (event.target as HTMLSelectElement).value;
+    this.selectedLocation.set(val);
+  }
+
+  onFuelSelect(event: Event) {
+    const val = (event.target as HTMLSelectElement).value;
+    this.selectedFuel.set(val);
+  }
+
+  onPriceInput(event: Event) {
+    const val = parseInt((event.target as HTMLInputElement).value, 10) || 300000000;
+    this.maxPrice.set(val);
+  }
+
+  onHealthScoreInput(event: Event) {
+    const val = parseInt((event.target as HTMLInputElement).value, 10) || 80;
+    this.minHealthScore.set(val);
+  }
+
+  onTrustScoreInput(event: Event) {
+    const val = parseInt((event.target as HTMLInputElement).value, 10) || 80;
+    this.minTrustScore.set(val);
+  }
+
+  onSearchInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(val);
+  }
+
+  simulateFileUpload() {
+    this.uploadedDocuments.set([
+      { name: 'CAC_Form_CO2_Certified.pdf', type: 'application/pdf' }
+    ]);
+    alert('Security Gate: Certificate physical CAC scan successfully uploaded and linked to unified profile identity.');
+  }
+
+  submitOnboardingForAudit() {
+    this.onboardingStep.set(4);
+  }
+
+  finalClickApproveSellerRole() {
+    this.platformState.unlockRole('Seller');
+    this.platformState.switchRole('Seller');
+    this.onboardingStep.set(1);
+    alert('Compliance Success: Certified Dealer Office successfully activated inside your active workspaces profile.');
+  }
+
+  onRegisterNewCar(
+    mk: HTMLInputElement, md: HTMLInputElement, yr: HTMLInputElement,
+    pr: HTMLInputElement, ml: HTMLInputElement, loc: HTMLSelectElement,
+    fl: HTMLSelectElement, tr: HTMLSelectElement, img: HTMLInputElement
+  ) {
+    if (!mk.value || !md.value || !yr.value || !pr.value) {
+      alert('Review forms: Submitting prestige listings require complete narrative parameters.');
+      return;
+    }
+    const formattedPrice = parseFloat(pr.value).toLocaleString() || '45,000,000';
+    this.platformState.addListing({
+      year: yr.value,
+      make: mk.value,
+      model: md.value,
+      price: formattedPrice,
+      mileage: ml.value || '15,000 mi',
+      location: loc.value,
+      fuel: fl.value,
+      transmission: tr.value,
+      financeAvailable: true,
+      dealer: this.dealerCompanyName() || 'Prestige Partner Group',
+      image: img.value || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1000&auto=format&fit=crop'
+    });
+    alert(`Success: ${mk.value} ${md.value} listed successfully. Field Inspectors scheduled for immediate diagnostics bays.`);
+    this.activeSellerTab.set('dashboard');
+  }
+
+  // Proposals Draft operations
+  openProposalDraft(id: string) {
+    this.draftingProposalForRequestId.set(id);
+    this.activeSourcingProposalVehicleDetails.set('');
+    this.activeSourcingProposalPrice.set('');
+  }
+
+  submitBrokerProposal(reqId: string) {
+    const details = this.activeSourcingProposalVehicleDetails().trim();
+    const priceText = this.activeSourcingProposalPrice().trim();
+    if (!details || !priceText) {
+      alert('Sourcing Audit: Fill in description and proposal settle price.');
+      return;
+    }
+    const fmt = parseFloat(priceText).toLocaleString();
+    this.platformState.submitSourcingProposal({
+      requestId: reqId,
+      brokerId: this.activeUser()?.id || 'usr-jordan-brk',
+      brokerName: this.activeUser()?.fullName || 'Jordan (Broker Sourced)',
+      vehicleDetails: details,
+      priceNaira: fmt,
+      proposedCommission: '₦' + (parseFloat(priceText) * 0.025).toLocaleString(),
+      image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1000&auto=format&fit=crop'
+    });
+    alert('Broker Success: Allocations proposition logged in buyer workspace.');
+    this.draftingProposalForRequestId.set(null);
+  }
+
+  onLaunchSourcingRequest() {
+    const make = this.customSourcingMake().trim();
+    const model = this.customSourcingModel().trim();
+    const budget = this.customSourcingBudget().trim();
+    if (!make || !model || !budget) {
+      alert('Mandatory Parameters: Sourcing blueprints require make, model, and budget.');
+      return;
+    }
+    const fmt = parseFloat(budget).toLocaleString();
+    this.platformState.submitSourcingRequest({
+      buyerName: this.activeUser()?.fullName || 'Jordan Williams',
+      buyerEmail: this.activeUser()?.email || 'jordanwill366@gmail.com',
+      vehicleMake: make,
+      vehicleModel: model,
+      yearRange: this.customSourcingYear() || '2020+',
+      budgetNaira: fmt,
+      comments: this.customSourcingComments() || 'Required pristine mechanics, single executive status.'
+    });
+    alert(`Pipeline Fired:Sourcing SOH Request for ${make} ${model} broadcast to licensed regional Brokers.`);
+    this.customSourcingMake.set('');
+    this.customSourcingModel.set('');
+    this.customSourcingBudget.set('');
+    this.customSourcingComments.set('');
+  }
+
+  getSourcingProposalsForRequest(rqId: string) {
+    return this.platformState.getSourcingProposalsForRequest(rqId)();
+  }
+
+  acceptSourcingProposal(prop: SourcingProposal) {
+    this.platformState.updateSourcingProposalStatus(prop.id, 'Accepted');
+    
+    // Automatically purchase Sourced item
+    const txId = this.platformState.purchaseVehicle({
+      id: 'sourced_' + prop.id,
+      image: prop.image,
+      year: '2021',
+      make: 'Prestige',
+      model: prop.vehicleDetails,
+      price: prop.priceNaira,
+      mileage: '12,000 mi',
+      location: 'Lagos Hub Port',
+      dealer: prop.brokerName,
+      isVerified: true,
+      hasEscrow: true,
+      score: '98',
+      fuel: 'Petrol',
+      transmission: 'Auto',
+      financeAvailable: false,
+      status: 'Approved',
+      ownerId: prop.brokerId
+    });
+
+    alert(`Escrow Collateral Setup: Sourcing proposal accepted! Initiating direct transaction holds for ₦${prop.priceNaira}. Transaction established: ${txId}`);
+    this.activeServicesSubTab.set('escrow');
+  }
+
+  declineSourcingProposal(id: string) {
+    this.platformState.updateSourcingProposalStatus(id, 'Declined');
+  }
+
+  activateBrokerAccountDirectBypass() {
+    this.platformState.unlockRole('Broker');
+    this.platformState.switchRole('Broker');
+    alert('Security Success: Certified Sourcing Broker status unlocked. Accessing commission boards.');
+  }
+
+  onLaunchCompareMatrix() {
+    let text = 'Carvello Matrix Comparison specs of bookmarked blueprints:\n\n';
+    this.comparedListings().forEach(v => {
+      text += `• ${v.year} ${v.make} ${v.model}: Price: ₦${v.price} | Fuel: ${v.fuel} | SOH rating: ${v.score}/100\n`;
+    });
+    alert(text);
+  }
+
+  // Logistics tracking tools
+  submitDispatchLog(txId: string) {
+    const text = this.logisticsStatusText().trim();
+    if (!text) return;
+    this.platformState.addTrackingLog(txId, text);
+    this.logisticsStatusText.set('');
+    alert('Dispatch logs tracker updated.');
+  }
+
+  releaseHandoverComplete(txId: string) {
+    this.platformState.submitHandover(txId, this.logisticsProofNotes() || "Delivered at client pre-inspection destination, certified spotless.");
+    this.platformState.advanceTransaction(txId, 'Completed');
+    this.logisticsProofNotes.set('');
+    alert('Escrow Gateway Status: Handover proof uploaded! Escrow holds released and transferred to seller profile.');
+  }
+
+  // AI Conversational engines
+  aiInteractChip(text: string) {
+    this.aiQueryText.set(text);
+    this.postAIQuery();
+  }
+
+  setFilterMake(brand: string) {
+    if (brand === 'All') {
+      this.resetFilters();
+    } else {
+      this.resetFilters();
+      this.selectedMake.set(brand);
+    }
+    this.activeTab.set('buy');
+    this.scrollToElement('sticky-filters');
+  }
+
+  postAIQuery() {
+    const q = this.aiQueryText().trim();
+    if (!q) return;
+
+    this.aiConversations.update(arr => [...arr, { sender: 'User', text: q }]);
+    this.aiQueryText.set('');
+    this.aiThinking.set(true);
+
+    setTimeout(() => {
+      let r = '';
+      const lq = q.toLowerCase();
+      if (lq.includes('compare') || lq.includes('versus') || lq.includes('vs')) {
+        r = `<strong>Carvello Deep-Research Diagnostics Spec sheet comparison matrix:</strong><br><br>
+        1. <strong>Lexus RX350 (2021) F-Sport:</strong> Price ₦42.5M. V6 3.5L powertrain. Transmission: Auto 8-speed. Fuel Efficiency: 22 mpg. Comfort Index: 98/100. Diagnostic Clearance: Spotless.<br>
+        2. <strong>Mercedes Benz GLE 450 (2022):</strong> Price ₦72M. Inline-6 Turbo with mild-hybrid synergy. Transmission: Auto 9-Speed. Fuel Efficiency: 24 mpg. Performance Index: 99/100. Residual Valuation: 94% retention.<br><br>
+        <em>Diagnostics Verdict:</em> Lexus delivers unparalleled maintenance cost-to-reliability ratio, while Mercedes GLE delivers superior technology and speed dynamics.`;
+      } else if (lq.includes('efficiency') || lq.includes('fuel') || lq.includes('hybrid')) {
+        r = `<strong>Hybrid & Electric Synergy Diagnostics Clearances:</strong><br><br>
+        - <strong>Optimal SOH Powertrains:</strong> Lexus hybrid synergy systems or Honda Accord Accord touring powertrain alignments consistently report maintenance indices below 3.5% over 5-year cycles.<br>
+        - <strong>Sourced Choice:</strong> Cayenne E-Hybrid utilizes 8-speed automatic with liquid lithium power matrixes, offering maximum zero-emission local commute clearance.`;
+      } else {
+        r = `Administrative audit completed for queries matching: <em>"${q}"</em>.<br><br>
+        Carvello regional registries hold <strong>12 Active Prestige assets</strong> matching those parameters. Escrow Collateral and 150-Point diagnostic certificates are cleared for instant physical फ्लैटबेड़ logistics scheduling.`;
+      }
+
+      this.aiConversations.update(arr => [...arr, { sender: 'AI', text: r }]);
+      this.aiThinking.set(false);
+    }, 1200);
+  }
+
+  // Navigation shortcuts
+  scrollToElement(id: string) {
+    if (typeof window === 'undefined') return;
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  formatPrice(num: number): string {
+    return num.toLocaleString();
+  }
 }

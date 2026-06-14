@@ -1,0 +1,1067 @@
+<!-- Unified CARVELLO Interactive Studio Simulation Deck -->
+<app-header (click)="activeMockupScreen.set('showroom')"></app-header>
+
+<div class="min-h-screen bg-[#050505] text-white font-sans relative pt-20 pb-16 overflow-x-hidden">
+  
+  <!-- Premium Atmospheric Background Glows -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+    <div class="absolute -top-40 -left-40 w-110 h-110 rounded-full bg-[#ebb15b]/5 blur-[160px]"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-cyan-950/20 blur-[130px]"></div>
+  </div>
+
+  <!-- MAIN DECK CONTENT RENDERER -->
+  <div class="relative z-10 max-w-[1400px] mx-auto px-6">
+
+    <!-- 1. DESKTOP WEBSITE MAIN VIEWPORT -->
+    @if (activeMockupScreen() === 'showroom') {
+      <div id="showroom-panel" class="space-y-12 animate-luxury-reveal">
+        <!-- Hero Placement block split row -->
+        <div class="relative rounded-3xl overflow-hidden min-h-[480px] lg:min-h-[520px] flex items-center bg-[#070707] border border-white/5 shadow-2xl p-8 sm:p-14 mb-8">
+          <!-- Background image & overlay -->
+          <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80" class="w-full h-full object-cover brightness-[0.4] scale-105" alt="Premium luxury Porsche" referrerpolicy="no-referrer" />
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0b0b0b]/10 via-[#0b0b0b]/60 to-[#0b0b0b]"></div>
+          </div>
+
+          <div class="relative z-10 max-w-4xl mx-auto w-full text-center space-y-6">
+            <div class="inline-block bg-black/60 backdrop-blur-md border border-[#D4A853]/40 rounded-full px-4 py-1.5 text-[10px] uppercase tracking-widest text-[#D4A853] font-semibold">
+              🇳🇬 NIGERIAN HIGH-INTEGRITY COALITION
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight font-display tracking-tight">
+              The Smarter Way to <br />
+              <span class="text-[#D4A853] italic">Buy, Sell & Own</span> Cars
+            </h1>
+            
+            <p class="mt-4 text-gray-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
+              Verified cars. Real people. Secure deals. All in one trusted digital escrow and diagnostics ecosystem.
+            </p>
+
+            <div class="mt-8 max-w-2xl mx-auto flex flex-col sm:flex-row gap-3 items-stretch">
+              <input 
+                type="text" 
+                [value]="searchQuery()" 
+                (input)="onSearchInput($event)" 
+                placeholder="Search cars, make, model, or type..." 
+                class="flex-1 bg-black/50 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#D4A853] transition duration-300 text-xs" 
+              />
+              <button 
+                (click)="activeMockupScreen.set('buyer')" 
+                class="bg-[#D4A853] hover:bg-[#c49645] text-black font-extrabold px-8 py-3 rounded-full text-xs uppercase tracking-wider transition-all duration-300 whitespace-nowrap shadow-lg shadow-[#D4A853]/10 cursor-pointer"
+              >
+                SEARCH CARS
+              </button>
+            </div>
+            
+            <!-- Quick Tags -->
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <span class="text-[9px] font-mono text-gray-500 uppercase tracking-wider">Quick filters:</span>
+              <button (click)="setFilterMake('All')" class="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] text-gray-300 hover:text-white transition duration-200">All brands</button>
+              <button (click)="setFilterMake('Lexus')" class="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] text-gray-300 hover:text-white transition duration-200">Lexus</button>
+              <button (click)="setFilterMake('Mercedes-Benz')" class="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] text-gray-300 hover:text-white transition duration-200">Mercedes</button>
+              <button (click)="setFilterMake('Toyota')" class="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] text-gray-300 hover:text-white transition duration-200">Toyota</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Statistics indicators row matching exact strings -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 select-none pt-4">
+          <div class="bg-[#121212]/40 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-all duration-300">
+            <span class="text-[9px] font-mono text-gray-500 tracking-widest uppercase font-bold leading-none">EXCELLENCE VERIFIED</span>
+            <h4 class="text-3xl font-display font-extrabold text-white mt-1.5 font-bold">12,540<span class="text-[#D4A853] font-light font-sans">+</span></h4>
+            <p class="text-[11px] text-gray-400 mt-1 font-light">Verified Luxury Cars Listed</p>
+          </div>
+          <div class="bg-[#121212]/40 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-all duration-300">
+            <span class="text-[9px] font-mono text-gray-500 tracking-widest uppercase font-bold leading-none">HAPPY CLIENTS</span>
+            <h4 class="text-3xl font-display font-extrabold text-white mt-1.5 font-bold">8,320<span class="text-[#D4A853] font-light font-sans">+</span></h4>
+            <p class="text-[11px] text-gray-400 mt-1 font-light">Satisified Buyers & Sellers</p>
+          </div>
+          <div class="bg-[#121212]/40 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-all duration-300">
+            <span class="text-[9px] font-mono text-gray-500 tracking-widest uppercase font-bold leading-none">REGIONAL NETWORK</span>
+            <h4 class="text-3xl font-display font-extrabold text-white mt-1.5 font-bold">1,250<span class="text-[#D4A853] font-light font-sans">+</span></h4>
+            <p class="text-[11px] text-gray-400 mt-1 font-light">Dealers & Certified Inspectors</p>
+          </div>
+          <div class="bg-[#121212]/40 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-all duration-300">
+            <span class="text-[9px] font-mono text-[#D4A853] tracking-widest uppercase font-bold leading-none">ESCROW SECURED</span>
+            <h4 class="text-3xl font-display font-extrabold text-[#D4A853] mt-1.5 font-bold">99.8<span class="text-white font-light font-sans">%</span></h4>
+            <p class="text-[11px] text-gray-400 mt-1 font-light">Transaction Success Rate</p>
+          </div>
+        </div>
+
+        <!-- Row of Why Choose Carvello Icons -->
+        <section class="space-y-4 text-left pt-2">
+          <h3 class="text-xl font-display font-bold text-white tracking-tight uppercase border-b border-white/5 pb-2">Why Choose Carvello?</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-[#121212]/40 border border-white/5 hover:border-[#D4A853]/20 p-6 rounded-2xl flex flex-col items-start gap-4 hover:-translate-y-1.5 transition-all duration-300 cursor-default">
+              <span class="w-12 h-12 rounded-xl bg-[#D4A853]/5 border border-[#D4A853]/20 flex items-center justify-center text-[#D4A853]"><mat-icon class="text-xl">verified_user</mat-icon></span>
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-sans leading-none">Verified Vehicles</h5>
+                <p class="text-[11px] text-gray-400 leading-relaxed font-sans mt-2">Every listing undergoes our 150-Point physical diagnostic protocol. Scanned, verified, and stamped with premium SOH certifications.</p>
+              </div>
+            </div>
+            <div class="bg-[#121212]/40 border border-white/5 hover:border-[#D4A853]/20 p-6 rounded-2xl flex flex-col items-start gap-4 hover:-translate-y-1.5 transition-all duration-300 cursor-default">
+              <span class="w-12 h-12 rounded-xl bg-[#D4A853]/5 border border-[#D4A853]/20 flex items-center justify-center text-[#D4A853]"><mat-icon class="text-xl">shield</mat-icon></span>
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-sans leading-none">Secure Payments</h5>
+                <p class="text-[11px] text-gray-400 leading-relaxed font-sans mt-2">Purchase funds are secured in our dynamic digital escrow vaults. Transfers occur strictly upon dual-approval receipt checks.</p>
+              </div>
+            </div>
+            <div class="bg-[#121212]/40 border border-white/5 hover:border-[#D4A853]/20 p-6 rounded-2xl flex flex-col items-start gap-4 hover:-translate-y-1.5 transition-all duration-300 cursor-default">
+              <span class="w-12 h-12 rounded-xl bg-[#D4A853]/5 border border-[#D4A853]/20 flex items-center justify-center text-[#D4A853]"><mat-icon class="text-xl">local_shipping</mat-icon></span>
+              <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider font-sans leading-none">Reliable Delivery</h5>
+                <p class="text-[11px] text-gray-400 leading-relaxed font-sans mt-2">Enclosed flatbed operations transport premium assets directly to your driveway, monitored live throughout transit pathways.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Popular Collections rooms -->
+        <section class="space-y-4 text-left">
+          <div class="flex items-center justify-between border-b border-white/5 pb-2">
+            <div>
+              <h3 class="text-lg font-display font-semibold text-white uppercase tracking-tight leading-none text-left">Popular Collections</h3>
+              <p class="text-[11px] text-gray-400 font-sans mt-1">Carefully aggregated premium portfolios.</p>
+            </div>
+            <span class="text-xs text-[#ebb15b] hover:underline cursor-pointer font-sans" (click)="activeMockupScreen.set('buyer')">See all rooms</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div (click)="setFilterMake('Porsche'); activeMockupScreen.set('buyer')" class="group relative h-40 rounded-2xl overflow-hidden border border-white/10 cursor-pointer shadow-xl">
+              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 duration-1000 transition-transform" referrerpolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-left">
+                <span class="text-[8px] font-mono text-[#ebb15b] font-bold tracking-widest uppercase">320 CARS</span>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mt-0.5">Luxury Collection</h4>
+              </div>
+            </div>
+            <div (click)="setFilterMake('Lexus'); activeMockupScreen.set('buyer')" class="group relative h-40 rounded-2xl overflow-hidden border border-white/10 cursor-pointer shadow-xl">
+              <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 duration-1000 transition-transform" referrerpolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-left">
+                <span class="text-[8px] font-mono text-cyan-400 font-bold tracking-widest uppercase">1,240 CARS</span>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mt-0.5">SUV Collection</h4>
+              </div>
+            </div>
+            <div (click)="setFilterMake('Toyota'); activeMockupScreen.set('buyer')" class="group relative h-40 rounded-2xl overflow-hidden border border-white/10 cursor-pointer shadow-xl">
+              <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 duration-1000 transition-transform" referrerpolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-left">
+                <span class="text-[8px] font-mono text-orange-400 font-bold tracking-widest uppercase">840 CARS</span>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mt-0.5">Family Collection</h4>
+              </div>
+            </div>
+            <div (click)="setFilterMake('Honda'); activeMockupScreen.set('buyer')" class="group relative h-40 rounded-2xl overflow-hidden border border-white/10 cursor-pointer shadow-xl">
+              <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 duration-1000 transition-transform" referrerpolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-left">
+                <span class="text-[8px] font-mono text-purple-400 font-bold tracking-widest uppercase">120 CARS</span>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mt-0.5">Electric Suite</h4>
+              </div>
+            </div>
+            <div (click)="setFilterMake('All'); activeMockupScreen.set('buyer')" class="group relative h-40 rounded-2xl overflow-hidden border border-white/10 cursor-pointer shadow-xl">
+              <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover brightness-50 group-hover:scale-105 duration-1000 transition-transform" referrerpolicy="no-referrer" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-left">
+                <span class="text-[8px] font-mono text-pink-400 font-bold tracking-widest uppercase">530 CARS</span>
+                <h4 class="text-xs font-bold text-white uppercase tracking-wider mt-0.5">Budget Collection</h4>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    }
+
+    <!-- 2. BUYER WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'buyer') {
+      <div id="buyer-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">CLIENT LOGGED IN : DAVID</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, David 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Buyer Showroom</span>
+        </div>
+
+        <!-- Stats columns grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Saved Cars</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">12</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>bookmark_border</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Active Offers</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">5</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>gavel</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Pending Deals</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">3</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>handshake</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Total Invested Spent</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">₦45.6M</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>payments</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Recommended module -->
+          <div class="lg:col-span-9 space-y-4">
+            <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">Recommended For You</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Toyota Camry 2019 Card -->
+              <div class="bg-[#0f0f0f] border border-white/10 rounded-2xl overflow-hidden hover:border-[#ebb15b]/40 transition-all duration-300">
+                <img src="https://images.unsplash.com/photo-1616422285623-13ff0162193c?q=80&w=400&auto=format&fit=crop" class="w-full h-36 object-cover" referrerpolicy="no-referrer" />
+                <div class="p-4 space-y-3.5 text-left">
+                  <div class="flex items-center gap-1.5 text-[8.5px] font-mono text-[#ebb15b] font-bold uppercase"><span>✓ SOH DIAGNOSTICS: 96%</span></div>
+                  <div>
+                    <h4 class="text-xs font-bold text-white font-sans uppercase">2019 Toyota Camry</h4>
+                    <p class="text-[11px] text-gray-400 font-sans">Lekki Marina, 28k mi</p>
+                  </div>
+                  <div class="flex items-center justify-between border-t border-white/5 pt-3">
+                    <span class="text-xs font-bold text-[#ebb15b]">₦11,500,000</span>
+                    <button (click)="activeMockupScreen.set('vehicledetails')" class="px-2.5 py-1.5 bg-white/5 hover:bg-white/10 rounded border border-white/10 text-[9px] uppercase font-bold">Inspect</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lexus RX 350 Card -->
+              <div class="bg-[#0f0f0f] border border-white/10 rounded-2xl overflow-hidden hover:border-[#ebb15b]/40 transition-all duration-300">
+                <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=400&auto=format&fit=crop" class="w-full h-36 object-cover" referrerpolicy="no-referrer" />
+                <div class="p-4 space-y-3.5 text-left">
+                  <div class="flex items-center gap-1.5 text-[8.5px] font-mono text-[#ebb15b] font-bold uppercase"><span>✓ SOH DIAGNOSTICS: 98%</span></div>
+                  <div>
+                    <h4 class="text-xs font-bold text-white font-sans uppercase">2020 Lexus RX 350 F-Sport</h4>
+                    <p class="text-[11px] text-gray-400 font-sans">Maitama Abuja, 14k mi</p>
+                  </div>
+                  <div class="flex items-center justify-between border-t border-white/5 pt-3">
+                    <span class="text-xs font-bold text-[#ebb15b]">₦42,500,000</span>
+                    <button (click)="activeMockupScreen.set('vehicledetails')" class="px-2.5 py-1.5 bg-white/5 hover:bg-white/10 rounded border border-white/10 text-[9px] uppercase font-bold">Inspect</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Honda Accord Card -->
+              <div class="bg-[#0f0f0f] border border-white/10 rounded-2xl overflow-hidden hover:border-[#ebb15b]/40 transition-all duration-300">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=400&auto=format&fit=crop" class="w-full h-36 object-cover" referrerpolicy="no-referrer" />
+                <div class="p-4 space-y-3.5 text-left">
+                  <div class="flex items-center gap-1.5 text-[8.5px] font-mono text-[#ebb15b] font-bold uppercase"><span>✓ SOH DIAGNOSTICS: 94%</span></div>
+                  <div>
+                    <h4 class="text-xs font-bold text-white font-sans uppercase">2020 Honda Accord Touring</h4>
+                    <p class="text-[11px] text-gray-400 font-sans">Victoria Island, 31k mi</p>
+                  </div>
+                  <div class="flex items-center justify-between border-t border-white/5 pt-3">
+                    <span class="text-xs font-bold text-[#ebb15b]">₦16,800,000</span>
+                    <button (click)="activeMockupScreen.set('vehicledetails')" class="px-2.5 py-1.5 bg-white/5 hover:bg-white/10 rounded border border-white/10 text-[9px] uppercase font-bold">Inspect</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Searches lists -->
+          <div class="lg:col-span-3 space-y-4 text-left">
+            <h3 class="text-xs font-bold uppercase text-gray-400 font-mono tracking-widest border-b border-white/5 pb-2">Recent Searches</h3>
+            <div class="flex flex-col gap-1.5">
+              <span class="p-2.5 bg-white/[0.01] hover:bg-white/5 rounded-xl border border-white/5 flex items-center justify-between text-xs font-semibold cursor-pointer text-white">
+                <span>Toyota Camry</span> <mat-icon class="text-xs text-gray-500">chevron_right</mat-icon>
+              </span>
+              <span class="p-2.5 bg-white/[0.01] hover:bg-white/5 rounded-xl border border-white/5 flex items-center justify-between text-xs font-semibold cursor-pointer text-white">
+                <span>Lexus RX 350</span> <mat-icon class="text-xs text-gray-500">chevron_right</mat-icon>
+              </span>
+              <span class="p-2.5 bg-white/[0.01] hover:bg-white/5 rounded-xl border border-white/5 flex items-center justify-between text-xs font-semibold cursor-pointer text-white">
+                <span>Honda Accord</span> <mat-icon class="text-xs text-gray-500">chevron_right</mat-icon>
+              </span>
+              <span class="p-2.5 bg-white/[0.01] hover:bg-white/5 rounded-xl border border-white/5 flex items-center justify-between text-xs font-semibold cursor-pointer text-white">
+                <span>Range Rover Sport</span> <mat-icon class="text-xs text-gray-500">chevron_right</mat-icon>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 3. SELLER WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'seller') {
+      <div id="seller-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">DEALER LOGGED IN : JOHN</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, John 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Dealer Office</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Active Listings</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">8</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>storefront</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Total Views</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">24</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>visibility</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Active Inquiries</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">6</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>chat_bubble_outline</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Total Earnings</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">₦28.6M</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>account_balance_wallet</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left Listings sheet -->
+          <div class="lg:col-span-8 space-y-4 text-left">
+            <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">My Inventory Listings</h3>
+            
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-gray-400 border-collapse">
+                <thead>
+                  <tr class="border-b border-white/10 text-[9.5px] uppercase font-mono tracking-widest text-gray-500">
+                    <th class="py-3 px-2">Prestige Vehicle</th>
+                    <th class="py-3 px-2">Asking Settle Price</th>
+                    <th class="py-3 px-2 text-center">SOH Score</th>
+                    <th class="py-3 px-2 text-right">Verification Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                    <td class="py-4 px-2 font-semibold text-white">2018 Mercedes-Benz C300</td>
+                    <td class="py-4 px-2 font-mono text-[#ebb15b]">₦28,000,000</td>
+                    <td class="py-4 px-2 text-center font-bold text-cyan-400">96%</td>
+                    <td class="py-4 px-2 text-right">
+                      <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold">Approved ✓</span>
+                    </td>
+                  </tr>
+                  <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                    <td class="py-4 px-2 font-semibold text-white">2021 Toyota Camry LE</td>
+                    <td class="py-4 px-2 font-mono text-[#ebb15b]">₦15,800,000</td>
+                    <td class="py-4 px-2 text-center font-bold text-cyan-400">94%</td>
+                    <td class="py-4 px-2 text-right">
+                      <span class="px-2 py-0.5 rounded bg-[#ebb15b]/10 text-[#ebb15b] border border-[#ebb15b]/20 text-[9px] font-mono uppercase font-bold">Active ✓</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick register car form inside mockup screen -->
+          <div class="lg:col-span-4 bg-[#0e0e0e] border border-white/15 p-5 rounded-3xl space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-[#ebb15b] font-mono flex items-center gap-1.5"><mat-icon class="text-sm">add_box</mat-icon> Register Prestige Car</h4>
+            
+            <div class="space-y-3 font-sans text-xs">
+              <div class="space-y-1">
+                <label class="text-[9.5px] font-mono font-bold uppercase text-gray-500">Prestige Brand & Model</label>
+                <input #newMakeModel type="text" placeholder="e.g. Porsche Cayenne" class="w-full h-10 bg-black border border-white/10 rounded-xl px-3 outline-none text-white text-xs" />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="space-y-1">
+                  <label class="text-[9.5px] font-mono font-bold uppercase text-gray-500">Year</label>
+                  <input #newYear type="text" placeholder="e.g. 2021" class="w-full h-10 bg-black border border-white/10 rounded-xl px-3 outline-none text-white text-xs" />
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[9.5px] font-mono font-bold uppercase text-gray-500">Mileage</label>
+                  <input #newMileage type="text" placeholder="e.g. 12,000 mi" class="w-full h-10 bg-black border border-white/10 rounded-xl px-3 outline-none text-white text-xs" />
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[9.5px] font-mono font-bold uppercase text-gray-500">Asking Price (₦ Naira, raw)</label>
+                <input #newPrice type="text" placeholder="e.g. 52000000" class="w-full h-10 bg-black border border-white/10 rounded-xl px-3 outline-none text-white text-xs" />
+              </div>
+              <button (click)="activeMockupScreen.set('buyer'); activeTab.set('buy')" class="w-full py-3 rounded-xl bg-[#ebb15b] hover:bg-amber-400 text-black text-[11px] font-bold uppercase tracking-wider transition-colors duration-300">
+                Submit Listing to Inspector
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 4. BROKER WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'broker') {
+      <div id="broker-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">BROKER ENTITY : JAMES</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, James 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Broker Desk</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Active Sourced Deals</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">15</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>handshake</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Sourcing Clients</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">8</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>people_outline</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-[#ebb15b]/25 flex items-center justify-between relative shadow-lg shadow-amber-500/5">
+            <div>
+              <p class="text-[10px] text-gray-505 font-mono font-bold uppercase tracking-wider leading-none">Pending Contracts</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">4</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>description</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Total Commissions</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">₦120.6M</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>monetization_on</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">Recent Client Sourcing Requests</h3>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-gray-400 border-collapse">
+              <thead>
+                <tr class="border-b border-white/10 text-[9.5px] uppercase font-mono tracking-widest text-gray-500">
+                  <th class="py-3 px-2">Client Wanted Model</th>
+                  <th class="py-3 px-2">Allocated Budget</th>
+                  <th class="py-3 px-2">SOH Target</th>
+                  <th class="py-3 px-2 text-right">Negotiation Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2021 Toyota Highlander</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">₦31,072,000</td>
+                  <td class="py-4 px-2 text-cyan-400 font-mono">92% mechanics min</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-mono uppercase font-bold">In Progress</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2020 Lexus RX 350</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">₦18,500,000</td>
+                  <td class="py-4 px-2 text-cyan-400 font-mono">94% mechanics min</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold">Completed ✓</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2022 Range Rover Velar</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">₦52,500,000</td>
+                  <td class="py-4 px-2 text-cyan-400 font-mono">96% mechanics min</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-mono uppercase font-bold">In Progress</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 5. INSPECTOR WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'inspector') {
+      <div id="inspector-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">DIAGNOSTICIAN ENTITY : MICHAEL</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, Michael 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Inspector Desk</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Pending Diagnostics</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">10</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>build_circle</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Completed Runs</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">28</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>check_circle</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Rating Accuracy</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">98.7%</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>equalizer</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Rating Score</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">4.9</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>star_border</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">Recent Physical Inspection Backlog</h3>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-gray-400 border-collapse">
+              <thead>
+                <tr class="border-b border-white/10 text-[9.5px] uppercase font-mono tracking-widest text-gray-500">
+                  <th class="py-3 px-2">Inspection Vehicle</th>
+                  <th class="py-3 px-2">Assigned Depot</th>
+                  <th class="py-3 px-2">Scheduled Period</th>
+                  <th class="py-3 px-2 text-right">Action Run</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2019 Toyota Camry F-Sport</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Victoria Island Depot</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">Today, 10:33 PM</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2.5 py-1 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20 text-[9px] font-mono uppercase font-bold cursor-pointer">Pending Run</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2020 Honda Accord Touring</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Lekki Depot Yard</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">Today, 09:12 AM</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold">Certified ✓</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">2019 Mercedes-Benz C300</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Ikeja Main Depot</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">Yesterday, 04:23 PM</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold">Certified ✓</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 6. DELIVERY PARTNER WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'delivery') {
+      <div id="delivery-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">FULFILLMENT DISPATCHER : AHMED</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, Ahmed 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Fulfillment Desk</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Pending Logistics</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">7</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>hourglass_empty</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">In Transit</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">12</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>local_shipping</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Completed Deliveries</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">25</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>check_circle_outline</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Dispatcher Rating</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">4.8</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>thumbs_up_down</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">Active Multi-Hub Delivery Transit Logs</h3>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-gray-400 border-collapse">
+              <thead>
+                <tr class="border-b border-white/10 text-[9.5px] uppercase font-mono tracking-widest text-gray-500">
+                  <th class="py-3 px-2">Vehicle Unit</th>
+                  <th class="py-3 px-2">Regional Route SOH</th>
+                  <th class="py-3 px-2">Logistics ID</th>
+                  <th class="py-3 px-2 text-right">Logistics Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">Toyota Highlander 2021</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Lagos Hub Port → Abuja Office</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">LOG-402</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[9px] font-mono uppercase font-bold">In Transit 🚚</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">Lexus RX 350 2020</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Enugu Depot → Port Harcourt</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">LOG-882</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-mono uppercase font-bold">Pending Allocation</span>
+                  </td>
+                </tr>
+                <tr class="border-b border-white/5 hover:bg-white/[0.01] transition-colors">
+                  <td class="py-4 px-2 font-semibold text-white">Honda Accord 2020</td>
+                  <td class="py-4 px-2 font-mono text-[#ebb15b]">Lagos Hub Port → Benin Office</td>
+                  <td class="py-4 px-2 text-gray-400 font-mono">LOG-102</td>
+                  <td class="py-4 px-2 text-right">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold">Delivered ✓</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 7. ADMIN WORKSPACE DASHBOARD -->
+    @if (activeMockupScreen() === 'admin') {
+      <div id="admin-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">SYSTEM ADMINISTRATOR NODE ACTIVE</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Welcome back, Admin 👋</h2>
+          </div>
+          <span class="px-3 py-1 bg-white/5 rounded-xl border border-white/10 font-mono text-[10px] text-[#ebb15b] uppercase font-bold tracking-widest">Active Workspace: Admin Engine</span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Total Registered Users</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">1,250</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><mat-icon>people</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Verified Vehicle stock</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">8,320</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-[#ebb15b]/10 border border-[#ebb15b]/20 flex items-center justify-center text-[#ebb15b]"><mat-icon>storefront</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Active Disputes Locked</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">256</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400"><mat-icon>gavel</mat-icon></span>
+          </div>
+          <div class="bg-[#121212] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-gray-500 font-mono font-bold uppercase tracking-wider leading-none">Security Rating System</p>
+              <h4 class="text-white text-2xl font-extrabold mt-1.5 leading-none">98.7%</h4>
+            </div>
+            <span class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><mat-icon>security</mat-icon></span>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <h3 class="text-base font-bold uppercase text-white font-display border-b border-white/5 pb-2">Platform Master Bypass Logs</h3>
+          <div class="p-4 bg-[#09090b] border border-white/5 rounded-2xl space-y-2.5 font-mono text-[11px] text-gray-400">
+            <div class="flex items-center gap-2"><span class="text-emerald-400">● SYSTEM</span> <span>[UTC 12:44] Auditing KYC requests from regional auto dealers CAC database.</span></div>
+            <div class="flex items-center gap-2"><span class="text-cyan-400">● LEDGER</span> <span>[UTC 13:02] Secured escrow deposits block confirmation holding ₦45,600,000 on Lexus contract.</span></div>
+            <div class="flex items-center gap-2"><span class="text-[#ebb15b]">● ONBOARD</span> <span>[UTC 14:11] Dispatcher Michael completed SOH checklist diagnostics review.</span></div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 8. VEHICLE STORY PAGE -->
+    @if (activeMockupScreen() === 'vehicledetails') {
+      <div id="details-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">VEHICLE DETAILS IDENTIFICATION</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">2020 Lexus RX 350 F-Sport</h2>
+          </div>
+          <button (click)="activeMockupScreen.set('showroom')" class="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 text-xs text-gray-300">Back</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left side 3D angles -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="relative h-[280px] sm:h-[380px] bg-black border border-white/20 rounded-3xl overflow-hidden flex items-center justify-center shadow-2xl">
+              <img [src]="showcaseAngles()[currentShowcaseAngleIndex()]" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+              <div class="absolute bottom-4 inset-x-0 flex justify-center gap-1.5">
+                @for (angleImg of showcaseAngles(); track angleImg; let idx = $index) {
+                  <button (click)="currentShowcaseAngleIndex.set(idx)" [ngClass]="currentShowcaseAngleIndex() === idx ? 'bg-[#ebb15b] scale-110' : 'bg-white/40'" class="w-11 h-1.5 rounded-full transition-all duration-300 outline-none cursor-pointer">
+                    <span class="sr-only">Showcase View Angle Position {{idx + 1}}</span>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Specs dynamic tab layout -->
+            <div class="flex items-center gap-1 border-b border-white/10 pb-0.5 text-xs select-none">
+              <button (click)="activeVehicleTab.set('dna')" [ngClass]="activeVehicleTab() === 'dna' ? 'text-[#ebb15b] border-[#ebb15b]' : 'text-gray-400 border-transparent'" class="px-4 py-2 border-b-2 font-bold uppercase tracking-wider bg-transparent outline-none cursor-pointer">Overview (DNA)</button>
+              <button (click)="activeVehicleTab.set('score')" [ngClass]="activeVehicleTab() === 'score' ? 'text-[#ebb15b] border-[#ebb15b]' : 'text-gray-400 border-transparent'" class="px-4 py-2 border-b-2 font-bold uppercase tracking-wider bg-transparent outline-none cursor-pointer">History Checklist</button>
+              <button (click)="activeVehicleTab.set('specs')" [ngClass]="activeVehicleTab() === 'specs' ? 'text-[#ebb15b] border-[#ebb15b]' : 'text-gray-400 border-transparent'" class="px-4 py-2 border-b-2 font-bold uppercase tracking-wider bg-transparent outline-none cursor-pointer">Inspection SOH Sheets</button>
+            </div>
+
+            <div class="bg-[#121212] p-5 rounded-2xl border border-white/5 leading-relaxed text-xs text-gray-300 font-sans">
+              @if (activeVehicleTab() === 'dna') {
+                <p>This Lexus RX 350 F-Sport AWD features standard dynamic all-wheel performance synergy, pristine multi-zone climate, panoramic views, and executive wood-interior configurations. Sourced with meticulous Nigerian local customs clearances verified by regional field administrators.</p>
+              }
+              @if (activeVehicleTab() === 'score') {
+                <ul class="space-y-1.5 font-mono text-xs">
+                  <li class="flex items-center gap-2 text-emerald-400">✓ Single executive owner title</li>
+                  <li class="flex items-center gap-2 text-emerald-400">✓ Completely clear custom transit clearance logs</li>
+                  <li class="flex items-center gap-2 text-emerald-400">✓ Accident-free chassis structural verification</li>
+                </ul>
+              }
+              @if (activeVehicleTab() === 'specs') {
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between bg-black/35 p-3 rounded-xl"><span>Engine Compress Cylinder:</span> <span class="font-bold text-[#ebb15b]">98/100</span></div>
+                  <div class="flex items-center justify-between bg-black/35 p-3 rounded-xl"><span>Gearbox Shift SOH:</span> <span class="font-bold text-[#ebb15b]">99/100</span></div>
+                  <div class="flex items-center justify-between bg-black/35 p-3 rounded-xl"><span>Suspension Absorbers:</span> <span class="font-bold text-[#ebb15b]">96/100</span></div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Right side details panel matching image widgets -->
+          <div class="lg:col-span-5 bg-[#0d0d0d] border border-white/10 p-6 rounded-3xl space-y-6 flex flex-col justify-between">
+            <div class="space-y-4">
+              <span class="inline-flex px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono uppercase font-bold leading-none">Depot Clearance Active</span>
+              <h3 class="text-xl font-display font-semibold text-white">Lexus RX 350 AWD F-Sport</h3>
+              <p class="text-xs text-gray-400 font-sans leading-relaxed">Original mechanical rating by Chief Diagnostician Michael Adebayo.</p>
+
+              <div class="h-px bg-white/10"></div>
+
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-gray-400">Verified Marketplace Ask:</span>
+                <span class="text-2xl font-bold text-[#ebb15b] font-display">₦42,500,000</span>
+              </div>
+            </div>
+
+            <div class="space-y-2 select-none">
+              <button (click)="activeMockupScreen.set('negotiations')" class="w-full py-3.5 rounded-xl bg-[#ebb15b] hover:bg-amber-400 text-black text-xs font-bold uppercase tracking-wider transition-colors duration-300">
+                Make Settle Offer
+              </button>
+              <button (click)="activeMockupScreen.set('logistics')" class="w-full py-3.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-bold uppercase tracking-wider text-white transition-colors duration-300">
+                Start Secure Escrow Buy
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 9. NEGOTIATION CENTER -->
+    @if (activeMockupScreen() === 'negotiations') {
+      <div id="nego-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">NEGOTIATION HUD CENTRAL</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Automotive Negotiations Room</h2>
+          </div>
+          <button (click)="activeMockupScreen.set('showroom')" class="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 text-xs text-gray-300">Back</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[550px] items-stretch">
+          <!-- Sourcing requests lists sidebar -->
+          <div class="lg:col-span-3 bg-[#0d0d0d] border border-white/10 rounded-2xl p-4 space-y-4 overflow-y-auto">
+            <span class="text-[9px] font-mono font-bold uppercase text-gray-500 tracking-wider">Active Counter Offers</span>
+            <div class="space-y-2">
+              <div class="p-3 bg-[#ebb15b]/10 border border-[#ebb15b]/30 rounded-xl text-left cursor-pointer">
+                <h5 class="text-xs font-bold text-white uppercase leading-none">Lexus RX 350</h5>
+                <p class="text-[9.5px] text-[#ebb15b] font-mono mt-1.5 leading-none">Offer: ₦38.0M</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Chat box matching mockup message styles -->
+          <div class="lg:col-span-9 bg-[#0e0e0e] border border-white/10 rounded-3xl flex flex-col justify-between overflow-hidden">
+            <div class="p-4 bg-black/40 border-b border-white/10 flex items-center justify-between">
+              <div>
+                <h4 class="text-xs font-bold text-white uppercase font-sans leading-none">Showroom floor representative</h4>
+                <p class="text-[9.5px] text-gray-500 font-sans mt-1 leading-none">Lexus RX350 Deal Room</p>
+              </div>
+              <span class="px-2 py-0.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[9px] font-mono uppercase font-bold text-right">Escrow Holds Active</span>
+            </div>
+
+            <!-- Scroll messages frame -->
+            <div class="p-5 overflow-y-auto flex-1 space-y-4 font-sans text-xs">
+              <div class="flex flex-col items-start gap-1 pb-1">
+                <span class="text-[9px] font-mono text-gray-500 font-bold">Dealer AutoHub Prime</span>
+                <div class="p-3 rounded-2xl bg-white/5 border border-white/5 text-gray-300 max-w-md text-left leading-relaxed">
+                  Greetings from the showroom. I represent AutoHub Prime. We noticed your interest in the certified Lexus RX350. We are willing to negotiate. What is your competitive counterproposal?
+                </div>
+              </div>
+
+              <div class="flex flex-col items-end gap-1 pb-1">
+                <span class="text-[9px] font-mono text-gray-500 font-bold text-right">You</span>
+                <div class="p-3 rounded-2xl bg-[#ebb15b]/10 border border-[#ebb15b]/30 text-[#ebb15b] max-w-md text-right font-mono">
+                  Proposed Buyer Counterproposal: ₦38,000,000 Naira
+                </div>
+              </div>
+
+              <div class="flex flex-col items-start gap-1 pb-1">
+                <span class="text-[9px] font-mono text-gray-500 font-bold">Dealer AutoHub Prime</span>
+                <div class="p-3 rounded-2xl bg-white/5 border border-white/5 text-gray-300 max-w-md text-left leading-relaxed">
+                  Carvello Escrow Matrix Sync: Received. Our logistics floor has acknowledged your premium counteroffer. We are preparing to dispatch flatbed transport options depending on physical location confirmation. Click "Accept & Start Transport" below to lock the deal!
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat trigger submit actions -->
+            <div class="p-3 bg-black/40 border-t border-white/10 flex items-center justify-between gap-3 select-none">
+              <button (click)="activeMockupScreen.set('logistics')" class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-bold uppercase tracking-wider cursor-pointer font-sans shadow-lg shadow-emerald-500/10">
+                Accept Deal & Unlock Logistics
+              </button>
+              <button (click)="activeMockupScreen.set('admin'); platformState.activeSettingsTab.set('Appearance')" class="px-5 py-3 rounded-xl bg-orange-500/10 border border-orange-500/20 text-[#ebb15b] text-[11px] font-bold uppercase tracking-wider cursor-pointer font-mono">
+                Bypass Diagnostics Check
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 10. DELIVERY TRACKING LOGISTICS TIMELINE -->
+    @if (activeMockupScreen() === 'logistics') {
+      <div id="logistics-panel" class="space-y-8 text-left animate-luxury-reveal">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div>
+            <span class="text-[10px] font-mono text-[#ebb15b] tracking-wider uppercase font-bold">DELIVERY DISPATCH & PIPELINE STATUS</span>
+            <h2 class="text-2xl font-display font-bold text-white mt-0.5">Tracking Portal : LOG-402</h2>
+          </div>
+          <button (click)="activeMockupScreen.set('showroom')" class="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 text-xs text-gray-300">Back</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Stepper timeline matching exact mockup specs list -->
+          <div class="lg:col-span-8 bg-[#0d0d0d] border border-white/10 p-8 rounded-3xl space-y-6">
+            <h3 class="text-sm font-bold uppercase text-white font-mono tracking-widest border-b border-white/5 pb-2">Logistics Milestones</h3>
+            
+            <div class="space-y-6 relative pl-6 border-l border-white/10 text-xs font-sans text-gray-300 select-none">
+              <!-- Checkpoint 1 -->
+              <div class="relative">
+                <span class="absolute -left-[30px] top-0 w-4 h-4 rounded-full bg-emerald-500 border border-black flex items-center justify-center text-black text-[8px] font-bold">✓</span>
+                <p class="font-bold text-white text-xs leading-none uppercase">1. Verification SOH Clearance Complete</p>
+                <p class="text-[10px] text-gray-500 font-mono mt-1">Today, 08:34 AM • VI diagnostics Depot</p>
+              </div>
+              <!-- Checkpoint 2 -->
+              <div class="relative">
+                <span class="absolute -left-[30px] top-0 w-4 h-4 rounded-full bg-emerald-500 border border-black flex items-center justify-center text-black text-[8px] font-bold">✓</span>
+                <p class="font-bold text-white text-xs leading-none uppercase">2. Secured Escrow Collateral Locked</p>
+                <p class="text-[10px] text-gray-500 font-mono mt-1">Today, 09:12 AM • Carvello Ledger Settlement</p>
+              </div>
+              <!-- Checkpoint 3 -->
+              <div class="relative">
+                <span class="absolute -left-[30px] top-0 w-4 h-4 rounded-full bg-emerald-500 border border-black flex items-center justify-center text-black text-[8px] font-bold">✓</span>
+                <p class="font-bold text-white text-xs leading-none uppercase">3. Flatbed Transporter Dispatched</p>
+                <p class="text-[10px] text-gray-500 font-mono mt-1">Today, 10:15 AM • Berger Hub Lagos</p>
+              </div>
+              <!-- Checkpoint 4 -->
+              <div class="relative">
+                <span class="absolute -left-[30px] top-0 w-4 h-4 rounded-full bg-[#ebb15b] border border-black flex items-center justify-center text-black text-[8px] font-bold">●</span>
+                <p class="font-bold text-white text-xs leading-none uppercase text-[#ebb15b]">4. Underway In Transit</p>
+                <p class="text-[10px] text-gray-500 font-mono mt-1">Today, 11:44 AM • Lagos-Ibadan Expressway checkpoint</p>
+              </div>
+              <!-- Checkpoint 5 -->
+              <div class="relative">
+                <span class="absolute -left-[30px] top-0 w-4 h-4 rounded-full bg-white/10 border border-black flex items-center justify-center text-black text-[8px] font-bold"></span>
+                <p class="font-bold text-gray-500 text-xs leading-none uppercase">5. Arriving Destination Cargo Center</p>
+                <p class="text-[10px] text-gray-600 font-mono mt-1">Scheduled for Abuja Depot Yard</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action parameters panel -->
+          <div class="lg:col-span-4 bg-[#0c0c0c] border border-white/15 p-6 rounded-3xl space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-[#ebb15b] font-mono flex items-center gap-1.5"><mat-icon class="text-sm">local_shipping</mat-icon> Transporter Logs</h4>
+            <p class="text-xs text-gray-400 font-sans leading-relaxed">Logistics partners update active checkpoints with dual signature clearances.</p>
+            
+            <div class="h-px bg-white/10"></div>
+
+            <div class="space-y-3 font-sans text-xs">
+              <div class="space-y-1">
+                <label class="text-[9.5px] font-mono font-bold uppercase text-gray-500">Status Checkpoint Coordinates</label>
+                <input #logisticsText type="text" placeholder="e.g. Arrived Lokoja Toll Gate" class="w-full h-10 bg-black border border-white/10 rounded-xl px-3 outline-none text-white text-xs font-mono" />
+              </div>
+              <button (click)="activeMockupScreen.set('showroom'); activeTab.set('services')" class="w-full py-3 rounded-xl bg-[#ebb15b] hover:bg-amber-400 text-black text-[11px] font-bold uppercase tracking-wider transition-colors duration-300">
+                Post Checkpoint Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 11. SPLASH / LOADING SCREEN -->
+    @if (activeMockupScreen() === 'loading') {
+      <div id="splash-panel" class="min-h-[500px] flex items-center justify-center animate-fadeIn select-none">
+        <div class="w-full max-w-md bg-[#0d0d0d] border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden">
+          <div class="absolute w-44 h-44 rounded-full bg-[#ebb15b]/5 -top-20 -left-20 blur-[60px]"></div>
+
+          <!-- Logo with circular nested gold 'C' design as requested in image description of loading screen -->
+          <div class="flex flex-col items-center space-y-3">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#ebb15b] to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/10 border-2 border-[#ebb15b]/20">
+              <span class="text-3xl font-display font-extrabold text-black font-sans -mt-0.5 select-none leading-none">C</span>
+            </div>
+            <h1 class="text-2xl font-display font-extrabold tracking-[0.2em] text-white uppercase mt-2 leading-none">CARVELLO</h1>
+            <p class="text-[10.5px] text-[#ebb15b] uppercase font-mono tracking-widest font-semibold">Building Trust In Every Vehicle Transaction</p>
+          </div>
+
+          <div class="h-px bg-white/10"></div>
+
+          <!-- Preloaded state verifications list as modeled inside thumbnail splash -->
+          <div class="space-y-3 text-left font-mono text-[11px] text-gray-400">
+            <div class="flex items-center gap-2 text-emerald-450 font-bold"><span>✓</span> <span>Verifying listings and dealer cac license...</span></div>
+            <div class="flex items-center gap-2 text-emerald-450 font-bold"><span>✓</span> <span>Checking field inspectors diagnostics reports...</span></div>
+            <div class="flex items-center gap-2 text-emerald-450 font-bold"><span>✓</span> <span>Loading regional escrow vaults registries...</span></div>
+            <div class="flex items-center gap-2 text-[#ebb15b] font-bold animate-pulse"><span>●</span> <span>Securing transaction settlements ledger...</span></div>
+          </div>
+
+          <!-- Progress status sits at 98% in thumbnail splash -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11.5px] font-mono">
+              <span class="text-gray-500 font-bold uppercase tracking-wider">System Setup</span>
+              <span class="text-[#ebb15b] font-extrabold">98% Progress</span>
+            </div>
+            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
+              <div class="h-full bg-gradient-to-r from-amber-600 to-[#ebb15b] rounded-full" style="width: 98%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- 12. ROLE SELECTION AUTHENTICATOR -->
+    @if (activeMockupScreen() === 'auth') {
+      <div id="auth-panel" class="min-h-[500px] flex items-center justify-center animate-fadeIn">
+        <div class="w-full max-w-lg bg-[#0d0d0d] border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl text-left">
+          <div class="text-center space-y-1">
+            <h2 class="text-xl font-display font-extrabold text-white">Choose Your Workspace</h2>
+            <p class="text-xs text-gray-400">Select which dashboard interface to load and activate instantly.</p>
+          </div>
+
+          <!-- Onboarding roles switcher cards grid -->
+          <div class="grid grid-cols-1 gap-2 select-none">
+            <button (click)="activeMockupScreen.set('buyer')" class="p-3 bg-white/[0.01] hover:bg-white/5 border border-white/10 hover:border-[#ebb15b]/40 rounded-xl flex items-center justify-between text-left transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-orange-400"><mat-icon class="text-sm">shopping_bag</mat-icon></span>
+                <div>
+                  <h5 class="text-xs font-bold text-white uppercase leading-none">Buyer Workspace</h5>
+                  <p class="text-[10px] text-gray-500 font-sans mt-1">Find, inspect and purchase certified vehicles</p>
+                </div>
+              </div>
+              <mat-icon class="text-gray-500 text-sm">chevron_right</mat-icon>
+            </button>
+
+            <button (click)="activeMockupScreen.set('seller')" class="p-3 bg-white/[0.01] hover:bg-white/5 border border-white/10 hover:border-[#ebb15b]/40 rounded-xl flex items-center justify-between text-left transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-[#ebb15b]/15 border border-[#ebb15b]/25 flex items-center justify-center text-[#ebb15b]"><mat-icon class="text-sm">storefront</mat-icon></span>
+                <div>
+                  <h5 class="text-xs font-bold text-white uppercase leading-none">Seller Workspace</h5>
+                  <p class="text-[10px] text-gray-500 font-sans mt-1">Register cars and manage active listings</p>
+                </div>
+              </div>
+              <mat-icon class="text-gray-500 text-sm">chevron_right</mat-icon>
+            </button>
+
+            <button (click)="activeMockupScreen.set('broker')" class="p-3 bg-white/[0.01] hover:bg-white/5 border border-white/10 hover:border-[#ebb15b]/40 rounded-xl flex items-center justify-between text-left transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center text-cyan-400"><mat-icon class="text-sm">handshake</mat-icon></span>
+                <div>
+                  <h5 class="text-xs font-bold text-white uppercase leading-none">Broker Workspace</h5>
+                  <p class="text-[10px] text-gray-500 font-sans mt-1">Manage sourcing requests and client portfolios</p>
+                </div>
+              </div>
+              <mat-icon class="text-gray-500 text-sm">chevron_right</mat-icon>
+            </button>
+
+            <button (click)="activeMockupScreen.set('inspector')" class="p-3 bg-white/[0.01] hover:bg-white/5 border border-white/10 hover:border-[#ebb15b]/40 rounded-xl flex items-center justify-between text-left transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/25 flex items-center justify-center text-purple-400"><mat-icon class="text-sm">analytics</mat-icon></span>
+                <div>
+                  <h5 class="text-xs font-bold text-white uppercase leading-none">Inspector Workspace</h5>
+                  <p class="text-[10px] text-gray-500 font-sans mt-1">Perform 150-point diagnostics reporting checklists</p>
+                </div>
+              </div>
+              <mat-icon class="text-gray-500 text-sm">chevron_right</mat-icon>
+            </button>
+
+            <button (click)="activeMockupScreen.set('delivery')" class="p-3 bg-white/[0.01] hover:bg-white/5 border border-white/10 hover:border-[#ebb15b]/40 rounded-xl flex items-center justify-between text-left transition-all duration-300">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-400"><mat-icon class="text-sm">local_shipping</mat-icon></span>
+                <div>
+                  <h5 class="text-xs font-bold text-white uppercase leading-none">Delivery Partner</h5>
+                  <p class="text-[10px] text-gray-500 font-sans mt-1">Dispatch vehicle flatbeds and logistics trackings</p>
+                </div>
+              </div>
+              <mat-icon class="text-gray-500 text-sm">chevron_right</mat-icon>
+            </button>
+          </div>
+
+          <div class="h-px bg-white/10"></div>
+
+          <div class="flex items-center justify-between text-xs text-gray-500 select-none">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" checked class="rounded border-white/10" /> Remember Choice
+            </label>
+            <button (click)="activeMockupScreen.set('buyer')" class="px-5 py-2.5 rounded-xl bg-[#ebb15b] hover:bg-amber-400 text-black text-xs font-bold uppercase tracking-wider duration-300 transition-colors">
+              Enter Workspace
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+
+  <app-footer></app-footer>
+</div>

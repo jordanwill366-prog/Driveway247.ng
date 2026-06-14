@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARVELLO – Premium Car Marketplace & Escrow Sourcing Ecosystem</title>
+    
+    <!-- Tailwind CSS (via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#D4A853',
+                            dark: '#B88F3A',
+                            light: '#EAD196',
+                            glow: 'rgba(212, 168, 83, 0.15)'
+                        },
+                        luxuryBlack: '#0b0b0b',
+                        luxuryGray: '#121212',
+                        luxurySlate: '#181818'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Playfair Display for headings & Inter for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,650;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Custom Premium Aesthetics */
+        body {
+            background-color: #0b0b0b;
+            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow & Shadow Effects */
+        .gold-drop-shadow {
+            filter: drop-shadow(0 4px 12px rgba(212, 168, 83, 0.25));
+        }
+        
+        .gold-border-glow {
+            box-shadow: 0 0 20px rgba(212, 168, 83, 0.08);
+            border-color: rgba(212, 168, 83, 0.2);
+        }
+
+        .gold-text-glow {
+            text-shadow: 0 0 12px rgba(212, 168, 83, 0.2);
+        }
+
+        /* Customized Scroller */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0b0b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #252525;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4A853;
+        }
+
+        /* Hide standard native scrollbars while preserving snap behavior */
+        .scrollbar-hidden::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hidden {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+
+        /* Scroll Reveal State transitions managed by IntersectionObserver */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="selection:bg-gold selection:text-black antialiased">
+
+    <!-- FLOATING GLASSMORPHIC NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-black/45 backdrop-blur-xl border-b border-white/5 select-none transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 h-20 flex items-center justify-between">
+            <!-- Brand Logotype -->
+            <a href="#" class="flex items-center gap-1.5 group">
+                <span class="text-xl sm:text-2xl font-display font-extrabold tracking-widest text-[#D4A853] transition duration-300 group-hover:text-white uppercase">CARVELLO</span>
+                <span class="w-1.5 h-1.5 bg-[#D4A853] rounded-full mt-1 animate-pulse"></span>
+            </a>
+
+            <!-- Editorial Menu Links -->
+            <div class="hidden md:flex items-center gap-10 text-[11px] font-mono tracking-[0.18em] uppercase text-gray-400">
+                <a href="#hero" class="hover:text-gold transition duration-300 font-medium">HOME</a>
+                <a href="#stats" class="hover:text-gold transition duration-300 font-medium">OVERVIEW</a>
+                <a href="#why" class="hover:text-gold transition duration-300 font-medium font-bold">WHY CHOOSE US</a>
+                <a href="#collections" class="hover:text-gold transition duration-300 font-medium">COLLECTIONS</a>
+            </div>
+
+            <!-- Header Action CTA -->
+            <div class="flex items-center gap-4">
+                <a href="#collections" class="px-6 py-2.5 rounded-full border border-gold/40 text-[10px] font-mono tracking-widest text-[#D4A853] hover:bg-[#D4A853] hover:text-black hover:border-gold hover:shadow-lg hover:shadow-gold-glow transition-all duration-300 uppercase">
+                    EXPLORE COLLECTION
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (100vh Atmospheric Depth) -->
+    <section id="hero" class="relative h-screen min-h-[660px] flex items-center justify-center overflow-hidden z-10">
+        <!-- Full-screen Cinematic Car Image Background -->
+        <div class="absolute inset-0 z-0 select-none pointer-events-none">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1800&q=80" 
+                 class="w-full h-full object-cover brightness-[0.35] scale-100 transition-transform duration-[12000ms] ease-out hover:scale-105" 
+                 alt="Cinematic sports vehicle" 
+                 referrerpolicy="no-referrer">
+            <!-- Multi-stop Premium Overlays -->
+            <div class="absolute inset-0 bg-gradient-to-t from-luxuryBlack via-transparent to-black/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-luxuryBlack/75 via-transparent to-luxuryBlack/30"></div>
+            <!-- Central Golden Light Dome -->
+            <div class="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_50%_35%,rgba(212,168,83,0.12)_0%,transparent_60%)]"></div>
+        </div>
+
+        <!-- Hero Symmetrical Contents -->
+        <div class="relative z-10 max-w-5xl mx-auto text-center px-6 space-y-6 sm:space-y-8">
+            
+            <!-- High-Integrity Coalition Honor Chip -->
+            <div class="inline-flex items-center gap-2 bg-black/75 backdrop-blur-md border border-[#D4A853]/35 rounded-full px-4 py-2 hover:border-gold transition duration-300 shadow-2xl">
+                <span class="text-[10px] uppercase font-mono tracking-[0.2em] text-[#D4A853] font-semibold flex items-center gap-2">
+                    <span class="text-xs select-none">🇳🇬</span> Nigerian High-Integrity Coalition
+                </span>
+            </div>
+
+            <!-- Title: Display Classic Serif -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold text-white leading-[1.08] tracking-tight">
+                The Smarter Way to <br class="hidden sm:inline" />
+                <span class="text-[#D4A853] italic font-serif font-semibold">Buy, Sell & Own</span> Cars
+            </h1>
+
+            <!-- Professional Subtext Paragraph -->
+            <p class="max-w-2xl mx-auto text-gray-300 text-sm sm:text-base font-light leading-relaxed tracking-wide">
+                Verified cars. Real people. Secure deals. All in one trusted digital escrow and diagnostics ecosystem. Driven by transparency, backed by elite regional experts.
+            </p>
+
+            <!-- Sophisticated Integrated Console Search Console -->
+            <div class="max-w-3xl mx-auto bg-luxuryGray/90 backdrop-blur-2xl border border-white/10 rounded-full p-2 flex flex-col sm:flex-row items-stretch gap-2 shadow-2xl focus-within:border-gold/45 focus-within:shadow-gold-glow transition-all duration-500">
+                <div class="flex-1 flex items-center gap-3.5 px-5 py-3 sm:py-0">
+                    <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" 
+                           id="car-search-input"
+                           placeholder="Search cars, make, model, or type..." 
+                           class="w-full bg-transparent text-xs text-white placeholder-gray-400 font-sans tracking-wide outline-none focus:ring-0 border-none">
+                </div>
+                <button id="car-search-btn"
+                        class="bg-gold hover:bg-gold-dark text-black font-extrabold text-xs tracking-widest uppercase font-mono px-8 py-4 sm:py-3.5 rounded-full shadow-lg shadow-gold/20 transform active:scale-95 transition-all duration-300 cursor-pointer">
+                    SEARCH CARS
+                </button>
+            </div>
+
+            <!-- Fine-print Safeguards Indicators -->
+            <div class="flex items-center justify-center gap-6 text-[10px] font-mono tracking-widest text-gray-400 pt-1 flex-wrap uppercase select-none">
+                <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-gold rounded-full"></span> Escrow Secured Operations</span>
+                <span class="w-1 h-1 bg-white/15 rounded-full hidden sm:inline"></span>
+                <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-gold rounded-full"></span> 150-Point Inspection Checked</span>
+            </div>
+        </div>
+
+        <!-- Elegant Micro Scroll Anchor -->
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 font-mono text-[9px] tracking-[0.25em] select-none pointer-events-none">
+            <span>SCROLL DOWN</span>
+            <svg class="w-4 h-4 text-gold animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- STATISTICS SECTION -->
+    <section id="stats" class="relative bg-luxuryBlack py-12 border-y border-white/5 overflow-hidden select-none">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+            <!-- Fluid responsive wrapper: horizontal snap-scroll on mobile, structured grid on desktop -->
+            <div class="flex overflow-x-auto lg:grid lg:grid-cols-4 gap-6 scrollbar-hidden snap-x snap-mandatory pb-4 lg:pb-0">
+                
+                <!-- Stat Card 1 -->
+                <div class="min-w-[280px] lg:min-w-0 flex-shrink-0 snap-center bg-luxuryGray/45 border border-white/5 hover:border-gold/20 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-mono text-gray-500 tracking-wider uppercase font-bold">DIRECTORY HUB</span>
+                        <div class="text-[#D4A853]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-3xl sm:text-4xl font-display font-extrabold text-white">
+                            12,540<span class="text-[#D4A853] font-light font-sans">+</span>
+                        </h4>
+                        <p class="text-[11px] text-gray-400 mt-2 font-mono uppercase tracking-widest font-light">Vehicles Listed</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 2 -->
+                <div class="min-w-[280px] lg:min-w-0 flex-shrink-0 snap-center bg-luxuryGray/45 border border-white/5 hover:border-gold/20 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-mono text-gray-500 tracking-wider uppercase font-bold">VERIFIED PLATFORM</span>
+                        <div class="text-[#D4A853]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-3xl sm:text-4xl font-display font-extrabold text-white">
+                            8,320<span class="text-[#D4A853] font-light font-sans">+</span>
+                        </h4>
+                        <p class="text-[11px] text-gray-400 mt-2 font-mono uppercase tracking-widest font-light">Happy Buyers</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="min-w-[280px] lg:min-w-0 flex-shrink-0 snap-center bg-luxuryGray/45 border border-white/5 hover:border-gold/20 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-mono text-gray-500 tracking-wider uppercase font-bold">EXCLUSIVE NETWORK</span>
+                        <div class="text-[#D4A853]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-3xl sm:text-4xl font-display font-extrabold text-white">
+                            1,250<span class="text-[#D4A853] font-light font-sans">+</span>
+                        </h4>
+                        <p class="text-[11px] text-gray-400 mt-2 font-mono uppercase tracking-widest font-light">Regional Sellers</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 4 -->
+                <div class="min-w-[280px] lg:min-w-0 flex-shrink-0 snap-center bg-luxuryGray/45 border border-white/5 hover:border-gold/25 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:-translate-y-1 transition-all duration-300 relative">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-mono text-gold tracking-wider uppercase font-bold">SOLIDIFIED ESCROW</span>
+                        <div class="text-gold">
+                            <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-3xl sm:text-4xl font-display font-extrabold text-gold">
+                            98.7<span class="text-white font-light font-sans">%</span>
+                        </h4>
+                        <p class="text-[11px] text-gray-400 mt-2 font-mono uppercase tracking-widest font-light">Trust Score</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE CARVELLO (Symmetrical Narrative Architecture) -->
+    <section id="why" class="relative py-24 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+            
+            <!-- Structural Section Header -->
+            <div class="max-w-3xl text-left mb-16 space-y-4 reveal">
+                <span class="text-gold text-[10px] font-mono tracking-[0.25em] uppercase font-bold">Uncompromising Safeguards</span>
+                <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
+                    Why Carvello Stands Apart
+                </h2>
+                <div class="w-16 h-0.5 bg-[#D4A853] mt-2"></div>
+                <p class="text-gray-400 text-sm sm:text-base font-light leading-relaxed">
+                    We designed our entire ecosystem around the absolute eradication of transaction vulnerability. Every vehicle is thoroughly diagnosed, every payment escrow-shielded, and every dispatch carrier approved. No compromises.
+                </p>
+            </div>
+
+            <!-- 3-Column Symmetrical Grid of core benefits requested by user -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Pillar 1: Verified Vehicles -->
+                <div class="bg-luxuryGray/45 border border-white/5 hover:border-gold/25 p-8 rounded-2xl flex flex-col justify-between gap-10 hover:-translate-y-2 duration-300 transition-all reveal">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold/5 border border-[#D4A853]/25 flex items-center justify-center text-[#D4A853]">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-display font-bold text-white">Verified Vehicles</h3>
+                        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed font-light">
+                            Every single listing on our portal must pass our comprehensive 150-Point system inspection. We map powertrain integrity, physical body panels, battery state of health, and legal ownership frameworks.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-[10px] font-mono text-gold tracking-widest uppercase mt-4 select-none">
+                        <span>Certified SOH Protocols</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Secure Payments -->
+                <div class="bg-luxuryGray/45 border border-white/5 hover:border-gold/25 p-8 rounded-2xl flex flex-col justify-between gap-10 hover:-translate-y-2 duration-300 transition-all reveal">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold/5 border border-[#D4A853]/25 flex items-center justify-center text-[#D4A853]">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-display font-bold text-white">Secure Payments</h3>
+                        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed font-light">
+                            Your transaction funds are protected inside safe, collateral-backed digital escrow vaulting systems. Funds remain completely sealed until both the buyer and the mechanics certify direct visual clearance.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-[10px] font-mono text-gold tracking-widest uppercase mt-4 select-none">
+                        <span>Escrow Escrow Gateway</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Reliable Delivery -->
+                <div class="bg-luxuryGray/45 border border-white/5 hover:border-gold/25 p-8 rounded-2xl flex flex-col justify-between gap-10 hover:-translate-y-2 duration-300 transition-all reveal">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-gold/5 border border-[#D4A853]/25 flex items-center justify-center text-[#D4A853]">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 5H7a2 2 0 00-2 2v9h14v-4l-3-5a2 2 0 00-2-2h-3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-display font-bold text-white">Reliable Delivery</h3>
+                        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed font-light">
+                            We operate premium enclosed multi-car flatbed transporters to secure logistics direct to your selected driveway destination. Tracked 24/7 with comprehensive safety coverage.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-[10px] font-mono text-gold tracking-widest uppercase mt-4 select-none">
+                        <span>Fleet Dispatch Matrix</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- POPULAR COLLECTIONS (Slick Horizontal snap-scroller with smooth micro-hovers) -->
+    <section id="collections" class="relative py-24 bg-luxuryBlack border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+            
+            <!-- Horizontal Scroller Title Header block -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between border-b border-white/5 pb-6 mb-12 reveal">
+                <div class="space-y-2">
+                    <span class="text-gold text-[10px] font-mono tracking-[0.25em] uppercase font-bold">Curated Portfolios</span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">Popular Collections</h2>
+                    <p class="text-gray-400 text-xs sm:text-sm font-light">Select elite categories processed under strict compliance diagnostics.</p>
+                </div>
+                <button class="mt-4 sm:mt-0 text-xs font-mono tracking-widest text-[#D4A853] hover:text-white uppercase flex items-center gap-1.5 transition duration-300">
+                    See All Rooms 
+                    <svg class="w-4 h-4 text-gold transform transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Horizontal Container with snap -->
+            <div class="flex overflow-x-auto gap-6 scrollbar-hidden snap-x snap-mandatory pb-6">
+                
+                <!-- Collection Card 1: Luxury -->
+                <div class="min-w-[290px] sm:min-w-[340px] flex-1 snap-center group relative h-[360px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition duration-500 hover:border-gold/30">
+                    <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600&q=80" 
+                         class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-105 duration-[1800ms] transition-transform ease-out animate-luxury-scrolled" 
+                         alt="Luxury Collection" 
+                         referrerpolicy="no-referrer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6 text-left flex flex-col items-start justify-between h-[312px]">
+                        <span class="text-[9px] font-mono text-gold tracking-widest uppercase font-bold bg-black/70 px-2.5 py-1 rounded border border-gold/20">320 CARS</span>
+                        <div>
+                            <h4 class="text-2xl font-display font-bold text-white mt-2 uppercase tracking-wide">LUXURY COLLECTION</h4>
+                            <p class="text-xs text-gray-300 mt-1 font-light">Supercars, sportbacks, and heritage luxury cruisers.</p>
+                            <button class="mt-4 text-[10px] font-mono uppercase tracking-widest text-gold flex items-center gap-1 hover:text-white transition duration-300">
+                                View Category
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Card 2: SUV -->
+                <div class="min-w-[290px] sm:min-w-[340px] flex-1 snap-center group relative h-[360px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition duration-500 hover:border-gold/30">
+                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80" 
+                         class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-105 duration-[1800ms] transition-transform ease-out" 
+                         alt="SUV Collection" 
+                         referrerpolicy="no-referrer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6 text-left flex flex-col items-start justify-between h-[312px]">
+                        <span class="text-[9px] font-mono text-gold tracking-widest uppercase font-bold bg-black/70 px-2.5 py-1 rounded border border-gold/20">1,240 CARS</span>
+                        <div>
+                            <h4 class="text-2xl font-display font-bold text-white mt-2 uppercase tracking-wide">SUV ADVENTURE</h4>
+                            <p class="text-xs text-gray-300 mt-1 font-light">Heavy duty prestige offroaders and hybrid SUVs.</p>
+                            <button class="mt-4 text-[10px] font-mono uppercase tracking-widest text-gold flex items-center gap-1 hover:text-white transition duration-300">
+                                View Category
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Card 3: Family -->
+                <div class="min-w-[290px] sm:min-w-[340px] flex-1 snap-center group relative h-[360px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition duration-500 hover:border-gold/30">
+                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80" 
+                         class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-105 duration-[1800ms] transition-transform ease-out" 
+                         alt="Family Collection" 
+                         referrerpolicy="no-referrer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6 text-left flex flex-col items-start justify-between h-[312px]">
+                        <span class="text-[9px] font-mono text-gold tracking-widest uppercase font-bold bg-black/70 px-2.5 py-1 rounded border border-gold/20">840 CARS</span>
+                        <div>
+                            <h4 class="text-2xl font-display font-bold text-white mt-2 uppercase tracking-wide">FAMILY ELITE</h4>
+                            <p class="text-xs text-gray-300 mt-1 font-light">Spacious luxury sedans with state-of-the-art security.</p>
+                            <button class="mt-4 text-[10px] font-mono uppercase tracking-widest text-gold flex items-center gap-1 hover:text-white transition duration-300">
+                                View Category
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Card 4: Electric -->
+                <div class="min-w-[290px] sm:min-w-[340px] flex-1 snap-center group relative h-[360px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition duration-500 hover:border-gold/30">
+                    <img src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=600&q=80" 
+                         class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-105 duration-[1800ms] transition-transform ease-out" 
+                         alt="Electric Collection" 
+                         referrerpolicy="no-referrer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6 text-left flex flex-col items-start justify-between h-[312px]">
+                        <span class="text-[9px] font-mono text-gold tracking-widest uppercase font-bold bg-black/70 px-2.5 py-1 rounded border border-gold/20">120 CARS</span>
+                        <div>
+                            <h4 class="text-2xl font-display font-bold text-white mt-2 uppercase tracking-wide">ELECTRIC SUITE</h4>
+                            <p class="text-xs text-gray-300 mt-1 font-light">Pure EV electric synergy drivetrains and smart autonomy.</p>
+                            <button class="mt-4 text-[10px] font-mono uppercase tracking-widest text-gold flex items-center gap-1 hover:text-white transition duration-300">
+                                View Category
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTION LOG NOTIFICATIONS MODAL -->
+    <div id="search-feedback-modal" class="hidden fixed inset-0 z-55 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+        <div class="bg-luxuryGray border border-gold/45 rounded-3xl p-8 max-w-md w-full space-y-6 text-center shadow-2xl relative">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="w-16 h-16 rounded-full bg-gold/5 border border-gold/30 flex items-center justify-center mx-auto text-gold animate-bounce">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <div class="space-y-2">
+                <h4 class="text-lg font-display font-bold text-white uppercase tracking-wider">CARVELLO ENGINE SYNCING</h4>
+                <p id="search-modal-text" class="text-xs text-gray-400 font-light leading-relaxed"></p>
+            </div>
+            <div class="pt-2">
+                <button id="modal-ok-btn" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-black text-xs font-mono font-bold tracking-widest uppercase rounded-full transition w-full cursor-pointer">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN EXECUTIVES FOOTER (Ample Clean Spaces) -->
+    <footer class="bg-luxuryBlack border-t border-white/5 py-20 text-xs text-gray-500 font-sans">
+        <!-- Main Symmetrical Columns Structure -->
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/5">
+            
+            <!-- Strategic Descriptor Column -->
+            <div class="md:col-span-5 space-y-4 text-left">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xl font-display font-bold text-[#D4A853] tracking-widest uppercase">CARVELLO</span>
+                    <span class="w-1.5 h-1.5 bg-[#D4A853] rounded-full mt-1"></span>
+                </div>
+                <p class="text-gray-400 font-light leading-relaxed max-w-sm">
+                    A high-integrity digital escrow and automotive sourcing platform. Synchronizing verified regional mechanics, elite collectors, and transport dispatchers nationwide.
+                </p>
+                <!-- Live Ping established timestamp indicator -->
+                <div class="text-[10px] font-mono text-gray-500 uppercase tracking-widest flex items-center gap-2 pt-2">
+                    <span class="w-2 h-2 rounded-full bg-gold inline-block animate-ping"></span>
+                    <span>COALITION STATUS: SECURED VAULTS (2026)</span>
+                </div>
+            </div>
+
+            <!-- Directory Menu list of columns -->
+            <div class="md:col-span-2 text-left space-y-4">
+                <h4 class="text-white font-bold font-mono tracking-wider uppercase text-[10px]">Buy</h4>
+                <ul class="space-y-2.5 font-light">
+                    <li><a href="#collections" class="hover:text-gold transition duration-200">Browse Vehicles</a></li>
+                    <li><a href="#collections" class="hover:text-gold transition duration-200">Premium Collection</a></li>
+                    <li><a href="#why" class="hover:text-gold transition duration-200">Inspection Reports</a></li>
+                    <li><a href="#hero" class="hover:text-gold transition duration-200">Valuations</a></li>
+                </ul>
+            </div>
+
+            <div class="md:col-span-2 text-left space-y-4">
+                <h4 class="text-white font-bold font-mono tracking-wider uppercase text-[10px]">Sell</h4>
+                <ul class="space-y-2.5 font-light">
+                    <li><a href="#hero" class="hover:text-gold transition duration-200">Private Seller Rooms</a></li>
+                    <li><a href="#why" class="hover:text-gold transition duration-200">Escrow Onboarding</a></li>
+                    <li><a href="#why" class="hover:text-gold transition duration-200">Safe Deliveries</a></li>
+                    <li><a href="#stats" class="hover:text-gold transition duration-200">Metrics Dashboard</a></li>
+                </ul>
+            </div>
+
+            <div class="md:col-span-3 text-left space-y-4">
+                <h4 class="text-white font-bold font-mono tracking-wider uppercase text-[10px]">Follow Excellence</h4>
+                <p class="text-gray-400 font-light leading-relaxed text-[11px]">Subscribe to our executive weekly summary for elite inventory additions and reports.</p>
+                <div class="flex items-center gap-2">
+                    <input type="email" placeholder="executive@domain.com" class="bg-luxuryGray border border-white/10 rounded-full px-4 py-2.5 text-[11px] text-white focus:outline-none focus:border-gold/35 placeholder-gray-500 w-full transition duration-300">
+                    <button class="bg-gold text-black rounded-full p-2.5 hover:bg-gold-dark transition duration-300 cursor-pointer flex-shrink-0" id="newsletter-btn">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Symmetrical Rights Reserved metadata row -->
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-[9px] uppercase tracking-widest">
+            <div>
+                <p>© 2026 CARVELLO NIGERIA LTD. ALL RIGHTS RESERVED.</p>
+            </div>
+            <div class="flex items-center gap-6 flex-wrap">
+                <a href="#hero" class="hover:text-gold transition">SECURITY & SECRECY RULES</a>
+                <span>|</span>
+                <a href="#hero" class="hover:text-gold transition">LIQUID COLLATERAL DISCLOSURE</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTION LOG SCRIPT -->
+    <script>
+        // DOM Interactivity Managers
+        const searchInput = document.getElementById('car-search-input');
+        const searchBtn = document.getElementById('car-search-btn');
+        
+        const feedbackModal = document.getElementById('search-feedback-modal');
+        const modalText = document.getElementById('search-modal-text');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalOkBtn = document.getElementById('modal-ok-btn');
+
+        const newsletterBtn = document.getElementById('newsletter-btn');
+
+        function triggerModal(text) {
+            if (feedbackModal && modalText) {
+                modalText.innerText = text;
+                feedbackModal.classList.remove('hidden');
+            }
+        }
+
+        function hideModal() {
+            if (feedbackModal) {
+                feedbackModal.classList.add('hidden');
+            }
+        }
+
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    triggerModal(`Initiating regional database sync for model range: "${query}". Connecting to high-integrity Nigerian escrow nodes & certified mechanics registries...`);
+                } else {
+                    triggerModal('Please specify a prestige make, model, or category keyword to execute regional diagnostics searching.');
+                }
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+        }
+
+        if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+        if (modalOkBtn) modalOkBtn.addEventListener('click', hideModal);
+
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', () => {
+                triggerModal('Ecosystem Log: Executive newsletter request logged. Authenticating secure communication link...');
+            });
+        }
+
+        // Beautiful Scroll Reveal Animation using standard IntersectionObserver
+        const revealedElements = document.querySelectorAll('.reveal');
+        if (revealedElements.length > 0) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: "0px 0px -40px 0px"
+            });
+
+            revealedElements.forEach(item => {
+                revealObserver.observe(item);
+            });
+        }
+    </script>
+</body>
+</html>

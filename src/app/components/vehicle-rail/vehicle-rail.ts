@@ -1,4 +1,4 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, OnInit, OnDestroy, viewChild, ElementRef, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card';
 import { Vehicle, PlatformStateService } from '../../services/platform-state';
@@ -39,30 +39,24 @@ import { Vehicle, PlatformStateService } from '../../services/platform-state';
        </div>
 
        <!-- Horizontal Scroll Container with custom inertia behavior -->
-       <div #railContainer class="w-full overflow-x-auto pb-4 hide-scrollbar pl-6 md:pl-[calc(50vw-700px+24px)] pr-6 scroll-smooth snap-x snap-mandatory">
+       <div #railContainer 
+            (mouseenter)="isHovered.set(true)" 
+            (mouseleave)="isHovered.set(false)"
+            (touchstart)="isHovered.set(true)"
+            (touchend)="isHovered.set(false)"
+            class="w-full overflow-x-auto pb-4 hide-scrollbar pl-6 md:pl-[calc(50vw-700px+24px)] pr-6 scroll-smooth snap-x snap-mandatory">
           <div class="flex gap-6 w-max py-4">
              @for(vehicle of vehicles(); track vehicle.id || vehicle.model; let idx = $index) {
                   <div class="snap-start animate-luxury-reveal opacity-0" [style.animation-delay.ms]="idx * 120">
-                     <app-vehicle-card
-                        [width]="340"
-                        [image]="vehicle.image"
-                        [year]="vehicle.year"
-                        [make]="vehicle.make"
-                        [model]="vehicle.model"
-                        [price]="vehicle.price"
-                        [mileage]="vehicle.mileage"
-                        [location]="vehicle.location"
-                        [dealer]="vehicle.dealer"
-                        [isVerified]="vehicle.isVerified"
-                        [hasEscrow]="vehicle.hasEscrow"
-                        [score]="vehicle.score || '95'"
-                        [fuel]="vehicle.fuel || 'Petrol'"
-                        [transmission]="vehicle.transmission || 'Automatic'"
-                        [financeAvailable]="vehicle.financeAvailable || false"
-                        [isSaved]="platformState.savedVehicleIds().includes(vehicle.id)"
-                        (saveClick)="platformState.toggleFavorite(vehicle.id)"
-                        (cardClick)="onVehicleSelect(vehicle)">
-                     </app-vehicle-card>
+                            <app-vehicle-card
+                               [width]="340"
+                               [vehicle]="vehicle"
+                               [isSaved]="platformState.savedVehicleIds().includes(vehicle.id)"
+                               (saveClick)="platformState.toggleFavorite(vehicle.id)"
+                               (cardClick)="onVehicleSelect(vehicle)"
+                               (compareClick)="compareClick.emit(vehicle)"
+                               (offerClick)="offerClick.emit(vehicle)">
+                            </app-vehicle-card>
                   </div>
              }
              
@@ -81,7 +75,7 @@ import { Vehicle, PlatformStateService } from '../../services/platform-state';
     }
   `]
 })
-export class VehicleRailComponent {
+export class VehicleRailComponent implements OnInit, OnDestroy {
    title = input.required<string>();
    subtitle = input<string>();
    vehicles = input.required<Vehicle[]>();
@@ -90,6 +84,56 @@ export class VehicleRailComponent {
 
    // Relays click
    vehicleClick = output<Vehicle>();
+   compareClick = output<Vehicle>();
+   offerClick = output<Vehicle>();
+
+   // View queries and hover signal to control auto horizontal slide
+   railContainer = viewChild<ElementRef<HTMLDivElement>>('railContainer');
+   isHovered = signal(false);
+   private autoScrollInterval: ReturnType<typeof setInterval> | null = null;
+
+   ngOnInit() {
+      if (typeof window !== 'undefined') {
+         this.startAutoScroll();
+      }
+   }
+
+   ngOnDestroy() {
+      this.stopAutoScroll();
+   }
+
+   private startAutoScroll() {
+      this.stopAutoScroll();
+      this.autoScrollInterval = setInterval(() => {
+         // Pause automatic slide if hovered or actively interacted by buyer
+         if (this.isHovered()) return;
+
+         const container = this.railContainer()?.nativeElement;
+         if (!container) return;
+
+         const firstCard = container.querySelector('app-vehicle-card');
+         const cardWidth = firstCard ? firstCard.clientWidth : 340;
+         const gap = 24; // gap-6
+         const scrollAmount = cardWidth + gap;
+
+         const maxScroll = container.scrollWidth - container.clientWidth;
+
+         if (container.scrollLeft >= maxScroll - 15) {
+            // Smoothly glide back to the first vehicle card
+            this.animateScroll(container, -container.scrollLeft);
+         } else {
+            // Glide forward to the next vehicle card
+            this.animateScroll(container, scrollAmount);
+         }
+      }, 4505);
+   }
+
+   private stopAutoScroll() {
+      if (this.autoScrollInterval) {
+         clearInterval(this.autoScrollInterval);
+         this.autoScrollInterval = null;
+      }
+   }
 
    onVehicleSelect(vehicle: Vehicle) {
      this.vehicleClick.emit(vehicle);
